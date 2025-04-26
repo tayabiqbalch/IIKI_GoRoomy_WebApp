@@ -1,0 +1,50 @@
+﻿@model IIKI.BaseApp.Business.Objects.CompanyType
+@using IIKI.BaseApp.Localization.Resources;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string menuName = CompanyTypeLabels.AddEditTitle;
+    string pageTitle = ViewBag.Title;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+    /*Page Header*/
+
+    var pageHeaderViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetPageHeader(Model.Id, pageTitle, $"{Model.TypeDescription}", (int)IIKI.BaseApp.Common.Navigations.CompanyTypes, (int)IIKI.BaseApp.Common.PageTypes.AddEdit);
+
+    Html.RenderPartial("_PageHeader", pageHeaderViewModel);
+    /*End Page Header*/
+
+    /*Page Content*/
+
+    /*generate buttons model which is used to display buttons in bottom and/or top of form*/
+    var buttonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit)
+    {
+        IsDisplaySaveButton = true,
+        IsDisplaySaveAddButton = true,
+        IsDisplayCancelButton = true,
+        SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit,
+        BackURL = Url.Action("Index")
+    };
+    /*generate page content model*/
+    var pageContentViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetAddEditPageContentModel(Model.Id, menuName, Model, buttonsViewModel);
+    pageContentViewModel.AddEditFormSubmitURL = Url.Action("AddEdit", new { Id = Model.Id });
+
+    <!--Page Content Partial View-->
+    Html.RenderPartial("_PageContent", pageContentViewModel);
+    /*End Page Content*/
+}
+@section scripts {
+    @*@Scripts.Render("~/bundles/jqueryValidation")*@
+    <script>
+
+        $(document).ready(function () {
+
+            $(document).on("click", ".btnFormSubmit", function () {
+                if ($("#@pageContentViewModel.AddEditFormSubmitURL").valid()) {
+                    ShowStickyPopup();
+                }
+            });
+        });
+
+    </script>
+}

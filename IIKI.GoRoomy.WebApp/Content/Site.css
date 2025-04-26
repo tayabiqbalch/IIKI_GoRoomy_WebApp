@@ -1,0 +1,6 @@
+﻿.modal-open {
+    overflow: inherit !important;
+}
+table#RecordsListTable {
+    width: fit-content !important;
+}

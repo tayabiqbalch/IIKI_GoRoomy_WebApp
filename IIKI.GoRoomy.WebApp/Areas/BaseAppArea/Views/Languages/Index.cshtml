@@ -1,0 +1,138 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@using System.Globalization;
+@model IEnumerable<ApplicationSupportedLanguage>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Languages";
+    int count = 1;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a>
+        <h2>@ViewBag.Title</h2>
+        <small>List of @ViewBag.Title.ToLower()</small>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class=" ipage-content">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-records-responsive">
+                        <table id="RecordsListTable" class="jq-dt-records-table table responsive nowrap table-hover table-sm ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Sr#
+                                    </th>
+                                    <th>
+                                        Display Name
+                                    </th>
+                                    <th>
+                                        English Name
+                                    </th>
+                                    <th>
+                                        Native Name
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Is Neutral Culture?
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    @*<th>
+            Three Letter ISO Language Name
+        </th>
+        <th>
+            Two Letter ISO Language Name
+        </th>
+        <th>
+            Three Letter Windows Language Name
+        </th>
+        <th>
+            Number Format
+        </th>
+        <th>
+            DateTime Format
+        </th>
+        <th>
+            Calendar
+        </th>
+        <th>
+            Ietf Language Tag
+        </th>
+        <th>
+            Is Read Only?
+        </th>
+        <th>
+            Keyboard Layout Id
+        </th>
+        <th>
+            LCID
+        </th>
+        <th>
+            Parent
+        </th>
+        <th>
+            Use User Override
+        </th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        @count
+                                        @{
+                                            count++;
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DisplayName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EnglishName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NativeName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CultureName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsNeutralCulture)
+                                    </td>
+                                    <td>
+                                        @Html.Partial("_RecordStatusPartial", new RecordStatusPartialViewModel() { Id = item.Id, RecordStatus = item.RecordStatus })
+
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        SetJqueryDatatable('RecordsListTable', [5,6], [5,6]);
+    </script>
+}

@@ -1,0 +1,82 @@
+﻿
+@using IIKI.BaseApp.Business.Objects
+@model MainModule
+@{
+    string menuName = IIKI.BaseApp.Localization.Resources.MainModuleLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+<div class="card-header">
+
+    <div class="card-tools">
+        <a class="close__popup btnClosePopup">X</a>
+    </div>
+    @if (Model.Id > 0)
+    {
+        <span>@ViewBag.Title</span>
+    }
+    else
+    {
+        Model.IsActive = true;
+        <span>@ViewBag.Title</span>
+    }
+</div>
+<div class="card-body">
+    @using (Html.BeginForm("_AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", @class = "", @id = "AddEditForm" }))
+    {
+
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.ModuleCode, new { @class = "required-field control-label" })
+                    @Html.ValidationMessageFor(m => m.ModuleCode, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.ModuleCode, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.ModuleCode) } })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    @Html.LabelFor(m => m.ModuleName, new { @class = "required-field control-label" })
+                    @Html.ValidationMessageFor(m => m.ModuleName, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.ModuleName, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.ModuleName) } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label-q" })
+                    @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsActive" } })
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryValidation")
+<script>
+    $(document).ready(function () {
+
+        $('.checkBoxField').checkboxpicker({
+            cls: 'btn-sm',
+            groupCls: 'btn-group-sm',
+        });
+
+        $(".checkBoxField").on("change", function () {
+            console.log($(this).attr('data-fieldName'));
+
+            console.log($(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val());
+
+            $(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val($(this).is(':checked'));
+        });
+
+        return false;
+    });
+
+</script>
+
