@@ -1,0 +1,52 @@
+﻿
+@using IIKI.BaseApp.Business.Objects
+@model Navigation
+@{
+    string menuName = IIKI.BaseApp.Localization.Resources.ApplicationAreaLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+<div class="modal-header">
+    @if (Model.Id > 0)
+    {
+        <span class="modal-title" id="AddEditModalTitle">@ViewBag.Title</span>
+    }
+    else
+    {
+        Model.IsActive = true;
+        <h5 class="modal-title" id="AddEditModalTitle">@ViewBag.Title</h5>
+    }
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+
+    @using (Html.BeginForm("_AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", @class = "", @id = "AddEditForm" }))
+    {
+        @Html.Partial("_AddEditForm", Model, new ViewDataDictionary { { "ActionName", "_AddEdit" }, { "LayoutColCount", 3 } })
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryValidation")
+<script>
+    $(document).ready(function () {
+        $(".js-select2").select2({ closeOnSelect: false, allowClear: true, });
+
+        $('.checkBoxField').checkboxpicker({
+            cls: 'btn-sm',
+            groupCls: 'btn-group-sm',
+        });
+
+        $(".checkBoxField").on("change", function () {
+            console.log($(this).attr('data-fieldName'));
+
+            console.log($(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val());
+
+            $(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val($(this).is(':checked'));
+        });
+
+        return false;
+    });
+
+</script>

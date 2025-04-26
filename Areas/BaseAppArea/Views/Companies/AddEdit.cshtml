@@ -1,0 +1,277 @@
+﻿@model IIKI.BaseApp.Business.Objects.CompanyViewModel
+@using System.Security.Claims;
+@using IIKI.GoRoomy.WebApp.Utility;
+@using IIKI.BaseApp.Localization.Resources;
+@using Microsoft.AspNet.Identity
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string menuName = CompanyLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    var UserIdentity = (ClaimsIdentity)Context.User.Identity;
+    var CurrentUser = UserIdentity.GetUserInfo();
+
+    string uploadedFilePath = string.Empty;
+    if (Model != null && !string.IsNullOrEmpty(Model.Company.CompanyLogo))
+    {
+        uploadedFilePath = IIKI.BaseApp.Common.CommonFunctions.GetConfigurationAppSettings("ResourcesPath")  + Model.Company.CompanyLogo;
+    }
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+}
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href="">
+            <div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div>
+        </a><h2>@ViewBag.Title</h2>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">@CompanyLabels.Title</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="ipage-content">
+
+    @using (Html.BeginForm("AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data", @class = "", @id = "AddEditForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Company.Id)
+        <div class="buttons-wraper ipage-buttons-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right">
+                        @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = Model.Company.Id, IsDisplaySaveButton = true, IsDisplaySaveAddButton = true, IsDisplayCancelButton = true, SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit, BackURL = Url.Action("Index") })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card icard">
+            <div class="card-body">
+                <ul class="nav nav-tabs itabs nav-pills" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Personal Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Address Information</a>
+                    </li>
+                </ul>
+
+
+                <div class="tab-content mt-2">
+                    <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                        <div id="accordion">
+                            <div class="card icard">
+                                <div class="card-header">
+                                    <span class="card-title">@menuName Information</span>
+                                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_Info")" aria-expanded="true"></a>
+                                </div>
+                                <div id="@(menuName.Trim().Replace(" ", "")+"_Info")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.CompanyTypeId, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.CompanyTypeId, "", new { @class = "text-danger" })
+                                                    @Html.DropDownListFor(model => model.Company.CompanyTypeId, new SelectList(Model.CompanyTypes, "Id", "TypeDescription"), "--SELECT--", new { @class = "form-control" })
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.CompanyName, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.CompanyName, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.CompanyName, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Company.CompanyName) } })
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.CompanyContact, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.CompanyContact, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.CompanyContact, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Company.CompanyContact) } })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.CompanyContact2, htmlAttributes: new { @class = "control-label" })
+                                                    @Html.ValidationMessageFor(model => model.Company.CompanyContact2, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.CompanyContact2, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Company.CompanyContact2) } })
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.CompanyEmail, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.CompanyEmail, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.CompanyEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Company.CompanyEmail) } })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.Website, htmlAttributes: new { @class = "control-label" })
+                                                    @Html.ValidationMessageFor(model => model.Company.Website, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.Website, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Company.Website) } })
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    <div class=" form-group">
+
+                                                        @Html.LabelFor(model => model.Company.ExpiryDate, htmlAttributes: new { @class = "control-label" })
+                                                        @Html.ValidationMessageFor(model => model.Company.ExpiryDate, "", new { @class = "text-danger" })
+                                                        <div class="input-group date datepicker" id="ExpiryDatePicker" data-target-input="nearest">
+                                                            @Html.EditorFor(model => model.Company.ExpiryDate, new { htmlAttributes = new { @class = "form-control datetimepicker-input", @data_target = "#ExpiryDatePicker", @placeholder = @Html.DisplayNameFor(model => model.Company.ExpiryDate) } })
+                                                            @*<input type="text" class="form-control datetimepicker-input" data-bs-target="#datetimepicker1" />*@
+                                                            <div class="input-group-append" data-bs-target="#ExpiryDatePicker" data-bs-toggle="datetimepicker">
+                                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                            </div>
+                                                        </div>
+                                                        @*<input type="text" class="form-control datetimepicker" id="ExpiryDate" name="ExpiryDate" data-bs-toggle="datetimepicker" data-bs-target="#ExpiryDate" />*@
+
+
+                                                    </div>
+                                                    <div class=" form-group">
+                                                        @Html.LabelFor(model => model.Company.CompanyLogo, htmlAttributes: new { @class = "control-label" })
+
+                                                        <div class="text-center">
+                                                            <img id="CompanyLogoPreview" src="@uploadedFilePath" onerror="if (this.src != '/Images/Your-Logo.png') this.src = '/Images/Your-Logo.png';" style="max-height:250px;max-width:250px;" />
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <div class="fileUpload btn btn-primary">
+                                                                <i class="fa fa-upload"></i> Upload Logo
+                                                                <input id="CompanyLogoUpload" type="file" name="CompanyLogoUpload" class="upload">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" form-group">
+                                                        @Html.LabelFor(model => model.Company.IsActive, htmlAttributes: new { @class = "control-label-q" })
+                                                        @Html.EditorFor(model => model.Company.IsActive, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsActive" } })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.AboutCompany, htmlAttributes: new { @class = "control-label" })
+                                                    @Html.ValidationMessageFor(model => model.Company.AboutCompany, "", new { @class = "text-danger" })
+                                                    @Html.TextAreaFor(model => model.Company.AboutCompany, new { @class = "form-control", @rows = "5", @placeholder = @Html.DisplayNameFor(model => model.Company.AboutCompany) })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                        <div id="accordion">
+                            <div class="card icard">
+                                <div class="card-header">
+                                    <span class="card-title">@menuName Address</span>
+                                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_Address")" aria-expanded="true"></a>
+                                </div>
+                                <div id="@(menuName.Trim().Replace(" ", "")+"_Address")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <!-- Address-->
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+
+                                                    @Html.LabelFor(model => model.Company.AddressLine1, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.AddressLine1, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.AddressLine1, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Company.AddressLine1) } })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.AddressLine2, htmlAttributes: new { @class = "" })
+                                                    @Html.ValidationMessageFor(model => model.Company.AddressLine2, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.AddressLine2, new { htmlAttributes = new { @class = "form-control", @placeholder = "Address Line 2" } })
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.CountryId, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.CountryId, "", new { @class = "text-danger" })
+                                                    @Html.DropDownListFor(model => model.Company.CountryId, new SelectList(Model.Countries, "Id", "CountryName"), "--SELECT--", new { @class = "form-control" })
+
+
+                                                </div>
+                                                <div class="col-md-6">
+
+                                                    @Html.LabelFor(model => model.Company.City, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.City, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.City, new { htmlAttributes = new { @class = "form-control", @placeholder = "City" } })
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.Province, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.Province, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.Province, new { htmlAttributes = new { @class = "form-control", @placeholder = "State/Province or Region" } })
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @Html.LabelFor(model => model.Company.ZipCode, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Company.ZipCode, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Company.ZipCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "ZipCode" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="buttons-wraper ipage-buttons-bottom">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right">
+                        @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = Model.Company.Id, IsDisplaySaveButton = true, IsDisplaySaveAddButton = true, IsDisplayCancelButton = true, SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit, BackURL = Url.Action("Index") })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+
+        $(document).ready(function () {
+            
+            $("#AddEditForm").validate().settings.ignore = "";
+
+            $(document).on("click", ".btnFormSubmit", function () {
+                if ($("#AddEditForm").valid()) {
+                    ShowStickyPopup();
+                }
+            });
+            $(document).on("click", ".btnBackToList", function () {
+                ShowStickyPopup();
+            });
+
+            $("#CompanyLogoUpload").change(function () {
+                if (ValidateFileExtension(this, 'img')) {
+                    previewUploadedFile(this, "CompanyLogoPreview");
+                } else {
+                    console.log('ValidateFileExtension failed');
+                }
+            });
+
+        });
+
+
+    </script>
+}
