@@ -1,1 +1,1 @@
-# IIKI_GoRoomy_WebApp
+# IIKI_PublishJournals
