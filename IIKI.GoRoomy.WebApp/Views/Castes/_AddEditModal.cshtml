@@ -1,0 +1,107 @@
+﻿
+@using IIKI.BaseApp.Business.Objects
+@model Caste
+@{
+    string menuName = IIKI.BaseApp.Localization.Resources.CasteLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+
+<div class="modal-header">
+    @if (Model.Id > 0)
+    {
+        <span class="modal-title" id="AddEditModalTitle">@ViewBag.Title</span>
+    }
+    else
+    {
+        Model.IsActive = true;
+        <h5 class="modal-title" id="AddEditModalTitle">@ViewBag.Title</h5>
+    }
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    @using (Html.BeginForm("_AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", @class = "", @id = "AddEditForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.CasteName, new { @class = "required-field control-label" })
+                    @Html.ValidationMessageFor(m => m.CasteName, "", new { @class = "text-danger" })
+                    <div class="keyboard-wrapper">
+                        @Html.EditorFor(model => model.CasteName, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "en", @placeholder = @Html.DisplayNameFor(m => m.CasteName) } })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.CasteNameUrdu, new { @class = "required-field control-label" })
+                    @Html.ValidationMessageFor(m => m.CasteNameUrdu, "", new { @class = "text-danger" })
+                    <div class="keyboard-wrapperRTL">
+                        @Html.EditorFor(model => model.CasteNameUrdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir="rtl", @placeholder = @Html.DisplayNameFor(m => m.CasteNameUrdu) } })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.CasteDescription, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(m => m.CasteDescription, "", new { @class = "text-danger" })
+                    <div class="keyboard-wrapper">
+                        @Html.TextAreaFor(model => model.CasteDescription, new { @rows = "3", @class = "form-control keyboardInput", @lang = "en", @placeholder = @Html.DisplayNameFor(m => m.CasteDescription) })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.ParentId, htmlAttributes: new { @class = "control-label" })
+                    @Html.ValidationMessageFor(m => m.ParentId, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.ParentId, new SelectList(ViewBag.CasteParentList, "Id", "CasteName"), new { @class = "form-control" })
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label-q" })
+                    @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsActive" } })
+                </div>
+            </div>
+        </div>
+
+
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryValidation")
+
+
+<script>
+    $(document).ready(function () {
+
+        $('.keyboardInput').each(function () {
+            if (!$(this)[0].VKI_attached)
+                VKI_attach($(this)[0]);
+
+        })
+
+        $('.checkBoxField').checkboxpicker({
+            cls: 'btn-sm',
+            groupCls: 'btn-group-sm',
+        });
+
+        $(".checkBoxField").on("change", function () {
+            console.log($(this).attr('data-fieldName'));
+
+            console.log($(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val());
+
+            $(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val($(this).is(':checked'));
+        });
+
+        return false;
+    });
+
+</script>

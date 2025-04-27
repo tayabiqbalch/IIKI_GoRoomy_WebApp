@@ -1,0 +1,94 @@
+﻿@model List<IIKI.BaseApp.Business.Objects.UserNavigation>
+@{
+    string Action = "";
+    string Controller = "";
+    string Area = "";
+    int Count = 1;
+    string selectedLanguage = "en";
+    HttpCookie cookie = HttpContext.Current.Request.Cookies["IIKI_SelectedLanguage"];
+    if (cookie != null && cookie.Value != null)
+    {
+        selectedLanguage = cookie.Value;
+    }
+}
+
+
+
+<div class="dropdown-menu ibigmenu-h animated lightSpeedIn">
+    <table class="table-sub-menu">
+        <tbody>
+            <tr>
+                @foreach (var navigation in Model)
+                {
+                    if (navigation.IsParent && (navigation.SubMenu == null || navigation.SubMenu.Count <= 0))
+                    {
+                        continue;
+                    }
+                    if (Count > 3)
+                    {
+                        @Html.Raw("</tr><tr>")
+                        Count = 1;
+                    }
+                    Count = Count + 1;
+                    Action = "";
+                    Controller = "";
+                    Area = "";
+                    if (navigation.SubMenu != null && navigation.SubMenu.Count > 0)
+                    {
+                        if (navigation.SubMenu.Where(x => x.Controller == navigation.Controller && x.Action == navigation.Action).ToList().Count > 0)
+                        {
+                            <td class=" dropdown-submenu dropright">
+                                <a href="@Url.Action(navigation.Action, navigation.Controller,new { area =navigation.Area})" class="dropdown-toggle dropdown-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                    @Html.Raw(navigation.MenuIcon)
+                                    <p class="dropdown-item-title">@(selectedLanguage.Equals("ur") ? navigation.MenuTitleUrdu : navigation.MenuTitle)</p>
+                                </a>
+
+                                @Html.Partial("_NavigationList", navigation.SubMenu)
+                            </td>
+                            continue;
+                        }
+                        else
+                        {
+                            <td class="dropdown-submenu dropright">
+                                <a href="#" class="dropdown-toggle dropdown-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @Html.Raw(navigation.MenuIcon)
+                                    <p class="dropdown-item-title">@(selectedLanguage.Equals("ur") ? navigation.MenuTitleUrdu : navigation.MenuTitle)</p>
+                                </a>
+                                @Html.Partial("_NavigationList", navigation.SubMenu)
+                            </td>
+
+
+
+                            continue;
+                        }
+                    }
+                    Action = navigation.Action;
+                    Controller = navigation.Controller;
+                    Area = navigation.Area;
+                    if (string.IsNullOrEmpty(navigation.Action))
+                    {
+                        Action = "";
+                    }
+                    if (string.IsNullOrEmpty(navigation.Controller))
+                    {
+                        Controller = "";
+                    }
+                    if (string.IsNullOrEmpty(navigation.Area))
+                    {
+                        Area = "";
+                    }
+
+                    <td>
+                        <a href="@Url.Action(Action, Controller,new { area=Area})" class="dropdown-item">
+                            @Html.Raw(navigation.MenuIcon)
+                            <p class="dropdown-item-title">@(selectedLanguage.Equals("ur") ? navigation.MenuTitleUrdu : navigation.MenuTitle)</p>
+                        </a>
+                    </td>
+                }
+
+            </tr>
+        </tbody>
+    </table>
+</div>
+

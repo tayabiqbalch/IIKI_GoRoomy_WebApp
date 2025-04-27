@@ -1,0 +1,21 @@
+﻿@model dynamic
+@using IIKI.BaseApp.Utils;
+@using System.Reflection;
+@{
+    IEnumerable<PropertyInfo> props = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetOrderedTableProperties(Model);
+
+}
+
+<thead>
+    <tr>
+        @foreach (var p in props)
+        {
+            @Html.Raw("<th>")
+            @Html.DisplayName(p.Name)
+            @Html.Raw("</th>")
+        }
+        @Html.Raw("<th>")
+        @Html.DisplayName("Actions")
+        @Html.Raw("</th>")
+    </tr>
+</thead>

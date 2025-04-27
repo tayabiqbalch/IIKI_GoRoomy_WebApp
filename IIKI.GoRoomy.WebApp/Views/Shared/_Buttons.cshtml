@@ -1,0 +1,69 @@
+﻿@using IIKI.BaseApp.Localization.Resources;
+@using IIKI.BaseApp.Business.Objects;
+@model ButtonsViewModel
+@if (Model.IsDisplayCreateButton)
+{
+    <a href="@Model.AddEditURL" class="btn btn-dark btn-sm"><i class="fa fa-plus"></i> @ButtonsAndLinks.CreateNewRecord</a>
+}
+@if (Model.IsDisplaySaveButton)
+{
+    <button type="@Model.SaveButtonType.ToString().ToLower()" value="save" name="formaction" class="btn btn-dark btn-sm btnFormSubmit"><i class="fa fa-save"></i> @ButtonsAndLinks.Save</button>
+}
+@if (Model.IsDisplaySaveAddButton)
+{
+    <button type="@Model.SaveButtonType.ToString().ToLower()" value="saveadd" name="formaction" class="btn btn-dark btn-sm btnFormSubmit"><i class="fa fa-save"></i> @ButtonsAndLinks.SaveAdd</button>
+}
+@if (Model.IsDisplaySubmitButton)
+{
+    <button type="@Model.SaveButtonType.ToString().ToLower()" value="submit" name="formaction" class="btn btn-dark btn-sm btnFormSubmit"><i class="fa fa-check-circle"></i> @ButtonsAndLinks.Submit</button>
+}
+@if (Model.IsDisplayCancelButton)
+{
+    <a href="@Model.BackURL" class="btn btn-secondary btn-sm btnBackToList"><i class="fas fa-times"></i> @ButtonsAndLinks.Cancel</a>
+}
+@if (Model.IsDisplayEditButton)
+{
+    <a href="@Model.AddEditURL" class="btn btn-dark btn-xs" title="@ButtonsAndLinks.Edit"><i class="fa fa-edit"></i> @ButtonsAndLinks.Edit</a>
+}
+@if (Model.IsDisplayRemoveButton)
+{
+    <a href="#" class="btn btn-danger btn-xs" onclick="DeleteRecord(this)" data-Id="@Model.Id" title="@ButtonsAndLinks.Remove"><i class="fa fa-trash-alt"></i> @ButtonsAndLinks.Remove</a>
+}
+@if (Model.IsDisplayDeleteButton)
+{
+    <a href="#" class="btn btn-danger btn-xs" onclick="DeleteRecord(this, true)" data-Id="@Model.Id" title="@ButtonsAndLinks.Remove"><i class="fa fa-trash-alt"></i> @ButtonsAndLinks.Delete</a>
+}
+@if (Model.IsGetModal && Model.IsDisplayCreateModalButton)
+{
+    <a href="#" onclick="AddEditRecordGet(this,@Model.Id)" class="btn btn-dark btn-sm" data-RecId="0" data-IsModalPopup="@Model.IsModalPopup.ToString().ToLower()" data-ModalPopupId="@Model.ModalPopupId" data-GetModalURL="@Model.GetModalURL" data-IsFormSubmit="@Model.IsPopupFormSubmit"><i class="fa fa-plus"></i> @ButtonsAndLinks.CreateModal</a>
+
+}
+else if (!Model.IsGetModal && Model.IsDisplayCreateModalButton)
+{
+    <a href="#" onclick="AddEditRecord(this,0)" data-RecId="0" class="btn btn-dark btn-sm"><i class="fa fa-plus"></i> @ButtonsAndLinks.CreateModal</a>
+}
+@if (Model.IsDisplayModalSaveButton)
+{
+    <button type="@Model.SaveButtonType.ToString().ToLower()" onclick="SaveModalFormAjax(this)" value="save" name="formaction" data-RecId="@Model.Id" data-ModalFormId="@Model.ModalFormId" data-ModalPopupId="@Model.ModalPopupId" data-GetModalURL="@Model.GetModalURL" data-IsReload="@Model.IsReload" data-IsGetModal="@Model.IsGetModal" class="btn btn-dark btn-sm btnSavePopup"><i class="fa fa-save"></i> @ButtonsAndLinks.Save</button>
+}
+@if (Model.IsDisplayModalSaveAddButton)
+{
+    <button type="@Model.SaveButtonType.ToString().ToLower()" onclick="SaveModalFormAjax(this)" value="saveadd" name="formaction" data-RecId="@Model.Id" data-ModalFormId="@Model.ModalFormId" data-ModalPopupId="@Model.ModalPopupId" data-GetModalURL="@Model.GetModalURL" data-IsReload="@Model.IsReload" data-IsGetModal="@Model.IsGetModal" class="btn btn-dark btn-sm btnSavePopup"><i class="fa fa-save"></i> @ButtonsAndLinks.SaveAdd</button>
+}
+@if (Model.IsDisplayModalCancelButton)
+{
+    <a href="#" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary btn-sm btnClosePopup"><i class="fas fa-times"></i> @ButtonsAndLinks.Cancel</a>
+}
+@if (Model.IsGetModal && Model.IsDisplayModalEditButton)
+{
+    <a href="#" onclick="AddEditRecordGet(this,@Model.Id)" class="btn btn-dark btn-sm btn-xs" data-RecId="@Model.Id" data-IsModalPopup="@Model.IsModalPopup.ToString().ToLower()" data-ModalPopupId="@Model.ModalPopupId" data-GetModalURL="@Model.GetModalURL" data-IsFormSubmit="@Model.IsPopupFormSubmit" title="@IIKI.BaseApp.Localization.Resources.ButtonsAndLinks.Edit"><i class="fa fa-plus"></i> @ButtonsAndLinks.EditModal</a>
+
+}
+else if (!Model.IsGetModal && Model.IsDisplayModalEditButton)
+{
+    <a href="#" onclick="AddEditRecord(this,@Model.Id)" data-RecId="@Model.Id" class="btn btn-dark btn-sm" title="@ButtonsAndLinks.Edit"><i class="fa fa-plus"></i> @ButtonsAndLinks.EditModal</a>
+}
+@foreach (var linkButton in Model.LinkButtons)
+{
+    <a href="@linkButton.ButtonURL" target="@linkButton.ButtonTarget" class="btn btn-@(((IIKI.BaseApp.Common.BootstrapColors)linkButton.BootstrapButtonColor).ToString().ToLower()) btn-@(((IIKI.BaseApp.Common.BootstrapSizes)linkButton.BootstrapButtonSize).ToString().ToLower())">@Html.Raw(linkButton.ButtonIcon) @linkButton.ButtonText</a>
+}

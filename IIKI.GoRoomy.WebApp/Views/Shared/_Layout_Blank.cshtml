@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>GoRoomy - @ViewBag.Title</title>
+
+
+    <link href="~/Content/LibrariesCSS/FAall.min.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/animate/css")
+    @Styles.Render("~/Content/bootstrap")
+
+    <link href="~/Content/LibrariesCSS/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/LibrariesCSS/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/LibrariesCSS/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Content/LibrariesCSS/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/LibrariesCSS/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/Content/LibrariesCSS/select2.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/iTheme/css")
+
+    @Styles.Render("~/Content/css")
+    <!-- Add local styles, mostly for plugins css file -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+
+</head>
+<body>
+    <div class="fullbody emptyLayout">
+        <div class="float-right" style="position: absolute;right:0;top:0;">
+            @Html.Partial("_Languages")
+        </div>
+        @Html.Partial("_CommonHiddenFields")
+        <main role="main">
+            <div class="container-fluid empty-wrapper">
+                @RenderBody()
+                @Html.Partial("_CommonStickyPopupLoader")
+
+                <!--Add/Edit Modal Popup load Partial view-->
+                <div id="iAddEditModal"></div>
+                <!--End Add/Edit Modal Popup load Partial view-->
+
+            </div>
+            <!-- Footer-->
+            @Html.Partial("_Footer")
+        </main>
+    </div>
+    <div class="scripts">
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        <script src="~/Scripts/bootstrap.bundle.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-popup-overlay/2.1.5/jquery.popupoverlay.min.js" integrity="sha512-gu0czvpcfFnRy+Dxo9M585nVnO8YbTnoFRWuSnvJVdBlaeaucDNAZUjP+IfscyQEIlUOGQLtzpVFpl32fkuKig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="~/Scripts/LibrariesJS/popper.min.js"></script>
+        <script src="~/Scripts/LibrariesJS/FAall.min.js"></script>
+        <script src="~/Scripts/LibrariesJS/jquery.popupoverlay.min.js"></script>
+
+        <script src="~/Scripts/LibrariesJS/moment.js"></script>
+        <script src="~/Scripts/LibrariesJS/moment-with-locales.js"></script>
+
+        <script src="~/Scripts/LibrariesJS/select2.min.js"></script>
+        <script src="~/Scripts/LibrariesJS/bootstrap-datepicker.min.js"></script>
+        <script src="~/Scripts/LibrariesJS/bootstrap-datetimepicker.min.js"></script>
+
+        <script src="~/Scripts/LibrariesJS/bootstrap-checkbox.min.js"></script>
+        <script src="~/Scripts/LibrariesJS/sweetalert.min.js"></script>
+        <script src="~/Scripts/LibrariesJS/sweetalert2.min.js"></script>
+
+        @Scripts.Render("~/bundles/jqueryValidation")
+        @Scripts.Render("~/bundles/iTheme/js")
+        @Scripts.Render("~/bundles/iTheme/customFunctionsJS")
+        <!--For editable datatable-->
+        @*@Scripts.Render("~/bundles/DataTables/buttons")
+        @Scripts.Render("~/bundles/DataTables/Select")
+        @Scripts.Render("~/bundles/DataTables/altEditor")*@
+
+        @RenderSection("scripts", required: false)
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@using IIKI.BaseApp.Localization.Resources;
+@using IIKI;
+@model IEnumerable<IIKI.GoRoomy.Business.Objects.HotelRoomSlot>
+@{
+    string pageTitle = ViewBag.Title;
+    string menuName = "Hotel Room Slots";
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+    long hotelId = ViewBag.DefaultHotelId;
+    long roomId = ViewBag.DefaultRoomId;
+
+    /*Page Header*/
+    var pageHeaderViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetPageHeader(0
+        , pageTitle
+        , (int)IIKI.GoRoomy.Common.Navigations.Hotels);
+    if (roomId > 0)
+    {
+        pageHeaderViewModel.tabs = new List<IIKI.BaseApp.Business.Objects.TabsViewModel>
+{
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Room Details", TabLink = Url.Action("AddEdit","HotelRooms", new { MotelId = hotelId.EncryptQueryString(), Id = roomId }), IsActive = false },
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Room Slots", TabLink = Url.Action("Index","HotelRoomSlots", new { MotelId = hotelId.EncryptQueryString(), MotelRoomId = roomId.EncryptQueryString() }), IsActive = true },
+
+        };
+    }
+    Html.RenderPartial("_PageHeader", pageHeaderViewModel);
+    /*End Page Header*/
+
+    /*Page Content*/
+
+    /*generate buttons model which is used to display buttons on top of grid*/
+    var buttonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing)
+    {
+        Id = 0,
+        IsModalPopup = true,
+        IsGetModal = true,
+        ModalPopupId = "AddEditModal",
+        ModalFormId = "AddEditForm",
+        AddEditURL = Url.Action("AddEdit", new { Id = 0, MotelId = hotelId.EncryptQueryString(), MotelRoomId = roomId.EncryptQueryString() }),
+        GetModalURL = Url.Action("_AddEditModal", new { Id = 0, HotelId = hotelId.EncryptQueryString() }),
+        IsDisplayCreateButton = true,
+        IsDisplayCreateModalButton = true
+    };
+    /*generate buttons model which is used to display buttons in grid rows*/
+    /*URLs for edit etc be like defined below: Url.Action("AddEdit", new { Id = "{0}" })*/
+
+    List<LinkButtons> linkButtons = new List<LinkButtons>();
+    linkButtons.Add(new LinkButtons() { ButtonURL = Url.Action("", ""), ButtonText = "Test", ButtonIcon = "<i class=\"fa fa-home\"></i>", BootstrapButtonColor = (int)IIKI.BaseApp.Common.BootstrapColors.Secondary });
+
+    /*generate page content model*/
+    var deleteFormSubmitURL = Url.Action("DeleteRecord");
+    var removeFormSubmitURL = Url.Action("MarkAsDeleteRecord");
+    var pageContentViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetListingPageContentModel(Model, buttonsViewModel, null, drawDeleteForm: true, deleteFormSubmitURL: deleteFormSubmitURL, drawRemoveForm: true, removeFormSubmitURL: removeFormSubmitURL);
+    /*Set data load dynamically*/
+    pageContentViewModel.GridViewModel.DrawGridBody = false;
+    /*Set Search Datatable URL*/
+    pageContentViewModel.SearchDataTableURL = Url.Action("SearchDataTableRecords");
+
+    <!--Page Content Partial View-->
+    Html.RenderPartial("_PageContent", pageContentViewModel);
+    /*End Page Content*/
+
+}
+@section scripts {
+    <script>
+
+        @*$(document).ready(function () {
+                SetJqueryDatatable('@pageContentViewModel.GridViewModel.GridHTMLId', [2], [2]);
+        });*@
+$(document).ready(function() {
+    LoadJQeuryDataTable({
+        GridHTMLId: '@pageContentViewModel.GridViewModel.GridHTMLId',
+        SearchDataTableURL: '@pageContentViewModel.SearchDataTableURL',
+        RequestParams: { RoomId: '@roomId', IsJvUser: false },// Custom AJAX parameters for the DataTable request
+        controllerName: '@currentControllerName',  // Example controller name
+        actionName: 'AddEdit',      // Example action name
+        areaName: '@currentAreaName',   // Optional area name
+        queryParams: { Id: 0, MotelId: '@hotelId.EncryptQueryString()', MotelRoomId: '@roomId.EncryptQueryString()' }, // Additional query params for the action buttons
+        isShowDelete: true,      // Optionally show the delete button
+        isShowRemove: false,      // Optionally show the soft delete(Remove) button
+        processing: true,  // Enable processing indicator
+        serverSide: true,  // Enable server-side processing
+        searching: true,   // Enable searching
+    });
+
+});
+    </script>
+}

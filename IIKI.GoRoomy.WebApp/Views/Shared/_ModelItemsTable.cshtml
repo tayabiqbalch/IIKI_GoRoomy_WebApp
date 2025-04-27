@@ -1,0 +1,19 @@
+﻿@model IEnumerable<dynamic>
+@using System.Collections.Generic;
+@{
+    object oObject = Model.FirstOrDefault();
+}
+
+<div class="table-records-responsive">
+    <table id="RecordsListTable" class="jq-dt-records-table table responsive nowrap table-hover table-sm ">
+
+        @Html.Partial("_ModelItemsTableHead", oObject)
+        <tbody>
+            @foreach (object item in Model)
+            {
+                @Html.Partial("_ModelItemsTableBody", item)
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,15 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@model ButtonsViewModel
+    @{ 
+        var buttonModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing) { Id = 0, IsDisplayCreateModalButton = true, IsModalPopup = true, IsGetModal = true, GetModalURL = Url.Action("_AddEditModal", new { Id = 0 }), ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", IsDisplayCreateButton = true, AddEditURL = Url.Action("AddEdit", new { Id = 0 }) };
+
+    }
+<div class="ipage-buttons-@*@(Model.IsTop?"top":"bottom")*@  ibuttons">
+    <div class="row">
+        <div class="col-md-12">
+            <div class=" float-right">
+                @Html.Partial("_Buttons", buttonModel)
+            </div>
+        </div>
+    </div>
+</div>

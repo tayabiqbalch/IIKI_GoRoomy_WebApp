@@ -1,0 +1,134 @@
+﻿
+@using IIKI.BaseApp.Business.Objects
+@model ProductDocument
+@{
+    string menuName = IIKI.BaseApp.Localization.Resources.DocumentLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    string uploadedFilePath = string.Empty;
+    if (Model != null && !string.IsNullOrEmpty(Model.DocumentFullName))
+    {
+        uploadedFilePath = IIKI.BaseApp.Common.CommonFunctions.GetConfigurationAppSettings("CustomerImagesPath");
+    }
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+<div class="modal-header">
+    @if (Model.Id > 0)
+    {
+        <span class="modal-title" id="AddEditModalTitle">@ViewBag.Title</span>
+    }
+    else
+    {
+        Model.IsActive = true;
+        <h5 class="modal-title" id="AddEditModalTitle">@ViewBag.Title</h5>
+    }
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+@using (Html.BeginForm("_AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data", @class = "needs-validation", @id = "AddEditForm" }))
+{
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.ProductId)
+        @Html.HiddenFor(model => model.DocumentId)
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-12">
+                    @Html.LabelFor(model => model.DocumentTypeId, htmlAttributes: new { @class = "control-label required-field" })
+                    @Html.ValidationMessageFor(model => model.DocumentTypeId, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.DocumentTypeId, new SelectList(ViewBag.DocumentTypeList, "Id", "DocumentTypeName"), "--SELECT--", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.DocumentId, htmlAttributes: new { @class = "control-label required-field" })
+                    @Html.ValidationMessage("ProductDocumentUpload", new { @class = "text-danger" })
+                    <div class="text-center">
+                        <div class="fileUpload btn btn-primary">
+                            <i class="fa fa-upload"></i> Upload File
+                            <input id="ProductDocumentUpload" type="file" name="ProductDocumentUpload" required oninvalid="this.setCustomValidity('Please Select a File')" data-val-required="File is required" class="upload">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label-q" })
+                    @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsActive" } })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.IsPrimary, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.IsPrimary, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsPrimary" } })
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = 0, IsModalPopup = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", GetModalURL = Url.Action("_AddEditModal", new { Id = 0 }), SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit, IsDisplaySaveButton = true, IsDisplayModalCancelButton = true, IsReload = true })
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryValidation")
+<script>
+    $(document).ready(function () {
+        $("#AddEditForm").validate({
+            rules: {
+                ProductDocumentUpload: {
+                    required: true
+                },
+                DocumentTypeId: {
+                    required: true
+                }
+            },
+            messages: {
+                ProductDocumentUpload: {
+                    required: "File is reqiured"
+                },
+                DocumentTypeId: {
+                    required: "Document Type is reqiured"
+                },
+            }
+        });
+        $(document).on("click", ".btnFormSubmit", function () {
+            //debugger;
+            if ($("#AddEditForm").valid()) {
+                ShowStickyPopup();
+                return true;
+            }
+            //CommonErrorMessage("Invalid Data Entered", "Please enter all required & valid data and try again now.");
+            return false;
+        });
+        //$("#ProductDocumentUpload").change(function () {
+        //    if (ValidateFileExtension(this, 'img')) {
+        //        previewUploadedFile(this, "ProductDocumentPreview");
+        //    } else {
+        //        console.log('ValidateFileExtension failed');
+        //    }
+        //});
+
+        $('.checkBoxField').checkboxpicker({
+            cls: 'btn-sm',
+            groupCls: 'btn-group-sm',
+        });
+
+        $(".checkBoxField").on("change", function () {
+            console.log($(this).attr('data-fieldName'));
+
+            console.log($(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val());
+
+            $(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val($(this).is(':checked'));
+        });
+
+        return false;
+    });
+
+</script>

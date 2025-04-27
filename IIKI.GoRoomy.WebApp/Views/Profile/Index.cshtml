@@ -1,0 +1,420 @@
+﻿@model IIKI.BaseApp.Business.Objects.UserProfileViewModel
+@using System.Security.Claims;
+@using IIKI.GoRoomy.WebApp.Utility;
+@{
+    var UserIdentity = ((ClaimsIdentity)Context.User.Identity);
+    var CurrentUser = UserIdentity.GetUserInfo();
+
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a>
+        <h2>@ViewBag.Title</h2>
+        <small>Your Profile Info</small>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="ipage-content">
+
+    <div class="row">
+
+        <div class="col-lg-4">
+            <div class="card icard">
+                <div class="card-body">
+                    <div>
+                        <div class="text-center">
+                            <img alt="Profile Picture" class="img-circle m-b m-t-md" width="120" height="120" id="imgProfile" src="@(ViewBag.ProfileImage)">
+                        </div>
+
+                        <div class="text-center">
+                            <div class="fileUpload btn btn-primary">
+                                <i class="fa fa-upload"></i> Upload Picture
+                                <input id="fileupload" type="file" name="fileupload" class="upload" accept=".gif,.png,.jpg,.jpeg">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>@(Model.UserProfileInfo.FullName)</h3>
+
+                    <p>
+                        @(Model.UserProfileInfo.AboutContact)
+                    </p>
+
+                </div>
+
+
+                <div class="panel-footer contact-footer">
+                    <div class="row">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card icard">
+                <div class="card-body">
+                    <ul class="nav nav-tabs itabs nav-pills nav-fill" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="userProfile-tab" data-bs-toggle="tab" href="#userProfile" role="tab" aria-controls="userProfile" aria-selected="true">Personal Information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="userAddress-tab" data-bs-toggle="tab" href="#userAddress" role="tab" aria-controls="userAddress" aria-selected="false">Address Information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="changePassword-tab" data-bs-toggle="tab" href="#changePassword" role="tab" aria-controls="changePassword" aria-selected="false">Change Password</a>
+                        </li>
+                    </ul>
+
+
+                    <div class="tab-content mt-2">
+                        <div class="tab-pane fade show active" id="userProfile" role="tabpanel" aria-labelledby="userProfile-tab">
+                            @Html.Action("AddEditUserInfo", "Profile")
+                        </div>
+
+                        <div class="tab-pane fade" id="userAddress" role="tabpanel" aria-labelledby="userAddress-tab">
+                            @Html.Action("AddEditDefaultAddress", "Profile")
+                        </div>
+                        <div class="tab-pane fade" id="changePassword" role="tabpanel" aria-labelledby="changePassword-tab">
+                            @Html.Action("ChangePassword", "Profile")
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<input type="hidden" id="hdFileUploadURL" name="hdFileUploadURL" value="@Url.Action("UploadProfileImage", "Profile")" />
+
+@section Scripts {
+    
+    @Scripts.Render("~/bundles/fileupload")
+    @Scripts.Render("~/bundles/jqueryValidation")
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $(document).on("keyup", "#PhoneNumber", function () {
+
+                if ($(this).val().trim() != $("#DBPhoneNumber").val().trim()) {
+                    if ($(".VerifySpan").hasClass("input-group-addon")) {
+                        $(".VerifySpan").removeClass("input-group-addon");
+                    }
+
+                    if (!$(".VerifySpan").hasClass("input-group-btn")) {
+                        $(".VerifySpan").addClass("input-group-btn");
+                    }
+
+                    if (!$(".VerifiedIcon").hasClass("hidden")) {
+                        $(".VerifiedIcon").addClass("hidden");
+                    }
+
+                    if ($(".VerifyPhone").hasClass("hidden")) {
+                        $(".VerifyPhone").removeClass("hidden");
+                    }
+                } else {
+                    if (!$(".VerifySpan").hasClass("input-group-addon")) {
+                        $(".VerifySpan").addClass("input-group-addon");
+                    }
+
+                    if ($(".VerifySpan").hasClass("input-group-btn")) {
+                        $(".VerifySpan").removeClass("input-group-btn");
+                    }
+
+                    if ($(".VerifiedIcon").hasClass("hidden")) {
+                        $(".VerifiedIcon").removeClass("hidden");
+                    }
+
+                    if (!$(".VerifyPhone").hasClass("hidden")) {
+                        $(".VerifyPhone").addClass("hidden");
+                    }
+                }
+            });
+
+            $("#UserInfoForm").validate({
+
+                rules: {
+                    UserName: {
+                        required: true
+                    },
+                    FirstName: {
+                        required: true
+                    },
+                    LastName: {
+                        required: true
+                    },
+                    Email: {
+                        required: true
+                    }
+                    //PhoneNumber: {
+                    //    required: true
+                    //}
+                },
+                messages: {
+                    UserName: {
+                        required: "(Please Enter User Name)"
+                    },
+                    FirstName: {
+                        required: "(Please Enter First Name)"
+                    },
+                    LastName: {
+                        required: "(Please Enter Last Name)"
+                    },
+                    Email: {
+                        required: "(Please Enter Email)"
+                    }
+                    //PhoneNumber: {
+                    //    required: "(Please Enter Phone Number)"
+                    //}
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span",
+            });
+
+            $("#AddressForm").validate({
+
+
+                rules: {
+                    AddressLine1: {
+                        required: true
+                    },
+                    City: {
+                        required: true
+                    },
+                    ZipCode: {
+                        required: true
+                    }
+                },
+                messages: {
+                    AddressLine1: {
+                        required: "(Please Enter Address Line 1)"
+                    },
+                    City: {
+                        required: "(Please Enter City)"
+                    },
+                    ZipCode: {
+                        required: "(Please Enter Zip Code)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span",
+            });
+              $("#ChangePasswordForm").validate({
+                rules: {
+                    PasswordHash: {
+                        required: true
+                    },
+                    NewPasswordHash: {
+                        required: true
+                    },
+                      ConfirmPasswordHash: {
+                        equalTo: "#password",
+                        required: true
+                    }
+                },
+                messages: {
+                    PasswordHash: {
+                        required: "(Please Enter Old Password)"
+                    },
+                    NewPasswordHash: {
+                        required: "(Please New Password )"
+                    },
+                    ConfirmPasswordHash: {
+                        equalTo: "(Please Enter Confirm Password Same As New Password)",
+                        required: "(Please Enter Confirm Password)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                },
+                errorPlacement: function (error, element) {
+                    $(element)
+                            .closest("form")
+                            .find("label[for='" + element.attr("id") + "']")
+                            .append(error);
+                },
+                errorElement: "span",
+            });
+            $("#btnPasswordHash").on("click", function () {
+                UpdatePassword();
+            });
+
+
+
+        });
+
+        function UpdatePassword() {
+            var OldPasswordValue = $('#PasswordHash').val();
+            var NewPasswordValue = $('#NewPasswordHash').val();
+            var ConfirmPasswordHash = $('#ConfirmPasswordHash').val();
+            if (OldPasswordValue == "" || NewPasswordValue == "" || ConfirmPasswordHash == "") {
+                swal({
+                    title: "Error!",
+                    text: "Please Old Password, New Password or ConfirmPassword. Please try again later.",
+                    type: "error"
+                });
+                return false;
+            } else
+                if (NewPasswordValue != ConfirmPasswordHash) {
+                    swal({
+                        title: "Error!",
+                        text: "Please new password and confirm password value mismatch. Please enter new password and corfim password as a same",
+                        type: "error"
+                    });
+                    return false;
+                }
+                else {
+                    ShowStickyPopup();
+                    $.ajax({
+                        type: "POST",
+                        datatype: 'text',
+                        url: "@(Url.Action("UpdatePassword", "Account", new { area = string.Empty }))",
+                        data: { "OldPassword": OldPasswordValue, "NewPassword": NewPasswordValue },
+                        success: function (data) {
+                            HideStickyPopup();
+                            if (data == 'True') {
+                                swal({
+                                    title: "success!",
+                                    text: "Password updated successfully.",
+                                    type: "success"
+                                });
+                                $('#PasswordHash').val("");
+                                $('#NewPasswordHash').val("");
+                                $('#ConfirmPasswordHash').val("");
+                            }
+                            else {
+                                swal({
+                                    title: "Error!",
+                                    text: "Unable to update password. Please try again later.",
+                                    type: "error"
+                                });
+                            }
+
+                        },
+                        error: function () {
+                            HideStickyPopup();
+                            swal({
+                                title: "Error!",
+                                text: "Unable to update password. Please try again later.",
+                                type: "error"
+                            });
+                        }
+                    });
+
+                }
+        }
+
+
+        //--------------------------- file upload code starts here ----------------------------------
+
+        $("#fileupload").fileupload({
+            dataType: "json",
+            url: $("#hdFileUploadURL").val(),
+            autoUpload: true,
+
+            always: function (e, data) {
+                if (data.result.name === "success") {
+                    $("#imgProfile").attr("src", data.result.path);
+                    $("#imgHeaderProfile").attr("src", data.result.path);
+                    HideLoadingPopup();
+
+                } else if (data.result.name === "invalidExtension") {
+                    alert('Only Image extensions are allowed for example GIF, PNG, JPG, JPEG. Please check your file extension.');
+                }
+                else if (data.result.name === "size_exceeded") {
+                    alert('Maximum file size allowed is 500KB. Please check your file size.');
+                }
+                else if (data.result.name === "invalid_format") {
+                    alert("System could not verify the Image file format, Only Image file extensions are allowed for example GIF, PNG, JPG, JPEG. Please check your file extension/format.");
+                }
+                else if (data.result.name === "fail") {
+                    alert("File could not be uploaded. Please try again.");
+                }
+            },
+            add: function (e, data) {
+
+                var uploadFile = data.files[0];
+                var ext = uploadFile.name.split('.').pop().toLowerCase();
+                if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+                    alert('Only Image extensions are allowed for example GIF, PNG, JPG, JPEG. Please check your file extension.');
+                }
+                else if (data.files[0].size > 524288) {
+                    //524288 = 500KB
+                    //1048576 = 1MB
+                    alert('Maximum file size allowed is 500KB.\n Please check your file size.');
+                } else {
+                    //data.formData = { ImageType: "IMAGE", IsAutoResize: $('#chkAutoResize').is(":checked") ? true : false };
+                    data.submit();
+                    ShowLoadingPopup();
+                }
+
+            },
+            fail: function (e, data) {
+                alert(data.errorThrown);
+            },
+            //progressall: function (e, data) {
+            //$("#IdProgressBar").css("display", "block");
+            //var progress = parseInt(data.loaded / data.total * 100, 10);
+            //$(".progress .progress-bar").css("width", progress + "%");
+            //},
+            done: function (e, data) {
+                // alert('File uploaded successfully');
+            }
+
+
+        });
+
+        //--------------------------- file upload code ends here ----------------------------------
+        function copy(chk) {
+            var Id = chk.id;
+            //alert(Id);
+            try {
+                $("#" + Id).select();
+                document.execCommand('copy');
+                swal({
+                    title: "Success",
+                    text: "Your text has been copied to Clipboard.",
+                    type: "success"
+                });
+            }
+            catch (e) {
+                ShowAllErrorMessage(e.message);
+            }
+        }
+    </script>
+}

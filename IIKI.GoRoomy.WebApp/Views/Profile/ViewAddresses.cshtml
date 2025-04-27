@@ -1,0 +1,108 @@
+﻿@using IIKI.BaseApp.Business.Objects
+@model IEnumerable<ContactAddress>
+@{
+    ViewBag.Title = "Other Address";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a><h2>@ViewBag.Title</h2>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">Profile</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class=" ipage-content">
+    <div class="ipage-buttons-top ">
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" float-right">
+                    <a href="@Url.Action("AddEditAddress",new { id = 0 })" class="btn btn-dark btn-sm"><i class="fa fa-plus"></i> Create New</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card icard">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="table-records-responsive">
+                        <table id="RecordsListTable" class="jq-dt-records-table table responsive nowrap table-hover table-sm ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AddressLine1)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RecordStatus)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IsDefault)
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.AddressLine1 @item.AddressLine2 @item.City, @item.Province @item.CountryName
+                                        </td>
+                                        <td>
+                                            @if (item.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Active)
+                                            {
+                                                <span>Active</span>
+                                            }
+                                            else if (item.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.InActive)
+                                            {
+                                                <span>In-Active</span>
+                                            }
+                                            else if (item.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Deleted)
+                                            {
+                                                <span>Deleted</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IsDefault)
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("AddEditAddress",new { id = item.Id })" class="btn text-dark btn-xs" title="Edit Address"><i class="fa fa-edit"></i></a>
+                                            <a href="#" class="btn text-danger btn-xs" onclick="DeleteRecord(this)" data-Id="@item.Id" title="Delete Address"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_DeleteRecordForm", new IIKI.BaseApp.Business.Objects.DeleteRecordFormViewModel() { FormActionName = "MarkAsDeleteContactAddress", ControllerName = "Profile",})
+
+@section Scripts {
+    <script>
+        SetJqueryDatatable('RecordsListTable', [3], [3]);
+
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@model IIKI.BaseApp.Business.Objects.AddressViewModel
+@{
+    ViewBag.Title = "Default Address";
+}
+
+    <div id="accordion">
+
+        <div class="row form-group">
+            <div class="col-md-12 text-right">
+                <a href="@Url.Action("ViewAddresses")" class="btn btn-sm btn-secondary">Other Addresses</a>
+            </div>
+        </div>
+        <div class="card icard card-bordered">
+
+            <div class="card-header">
+                <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#addressInfo" aria-expanded="true"></a>
+                <span>Default Address</span>
+            </div>
+
+            <div id="addressInfo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+
+                    @using (Html.BeginForm("AddEditAddress", "Profile", FormMethod.Post, new { role = "form", @id = "AddressForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                        @Html.HiddenFor(model => model.ContactAddress.Id)
+                        @Html.HiddenFor(model => model.ContactAddress.AddressId)
+                        @Html.HiddenFor(model => model.ContactAddress.UserId)
+                        @Html.HiddenFor(model => model.ContactAddress.ContactId)
+                        @Html.HiddenFor(model => model.Address.Id)
+
+                        @Html.HiddenFor(model => model.ContactAddress.IsDefault)
+                        @Html.HiddenFor(model => model.ContactAddress.IsActive)
+                        <input type="hidden" id="IsDefaultAddress" name="IsDefaultAddress" value="true" />
+                        <div class="form-horizontal">
+                            <!-- Address-->
+
+                            @Html.Partial("_AddressAddEditPartial", Model)
+
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <a href="@Url.Action("ViewAddresses")" class="btn btn-sm btn-secondary">Other Addresses</a>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="text-right mt-2">
+                                    <button class="btn btn-sm btn-dark m-t-n-xs" type="submit"><i class="fa fa-save"></i> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

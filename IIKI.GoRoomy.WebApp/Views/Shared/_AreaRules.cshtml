@@ -1,0 +1,66 @@
+﻿@model List<IIKI.BaseApp.Business.Objects.AreaRule>
+@{
+    string IsChecked = "";
+    int ruleCount = 0;
+}
+
+<div class="col-sm-12 p-sm">
+    <div class="row form-group">
+        @foreach (var areaRule in Model)
+        {
+            if (areaRule.NavigationId == null)
+            {
+                areaRule.NavigationId = 0;
+            }
+            if (ViewBag.EditUser != null)
+            {
+                if (Convert.ToInt32(areaRule.Id) - 1 < ViewBag.EditUser.RightsAssigned.Length)
+                {
+                    //if (areaRule.ApplicationAreaId == 26 && areaRule.Id == 132)
+                    //{
+                    //    var sd = ViewBag.EditUser.RightsAssigned.Substring(Convert.ToInt32(areaRule.Id) - 1, 1);
+                    //}
+
+                    IsChecked = ViewBag.EditUser.RightsAssigned.Substring(Convert.ToInt32(areaRule.Id) - 1, 1);
+                }
+                else
+                {
+                    IsChecked = "0";
+                }
+            }
+            else
+            {
+                IsChecked = "0";
+            }
+
+            IsChecked = (IsChecked == "1" ? "checked" : "");
+
+            if (areaRule.IsLineBreak && ruleCount>0)
+            {
+                @Html.Raw("</div><div class=\"row form-group\">")
+                <div class="col-12">
+                    <label class="">
+                        <input data-id="@(areaRule.MainNavigationId)" data-appareaid="@areaRule.ApplicationAreaId" type="checkbox" value="@(areaRule.Id)" data-title="@areaRule.MenuTitle" class="select_all_navigation@(areaRule.ApplicationAreaId) select_all_navigation selectallnavigation@(areaRule.MainNavigationId)"> @areaRule.MenuTitle
+                    </label>
+                    <label class="font-weight-6"></label>
+                </div>
+            }
+            else if(ruleCount==0)
+            {
+                <div class="col-12">
+                    <label class="">
+                        <input data-id="@(areaRule.MainNavigationId)" data-appareaid="@areaRule.ApplicationAreaId" type="checkbox" value="@(areaRule.Id)" data-title="@areaRule.MenuTitle" class="select_all_navigation@(areaRule.ApplicationAreaId) select_all_navigation selectallnavigation@(areaRule.MainNavigationId)"> @areaRule.MenuTitle
+                    </label>
+                        <label class="font-weight-6"></label>
+                </div>
+            }
+            ruleCount ++;
+        <div class="col-sm-3">
+            <label class="checkbox-inline normal-label">
+                <input @(IsChecked) data-id="@(areaRule.ApplicationAreaId)" data-navid="@(areaRule.MainNavigationId)" type="checkbox" value="@(areaRule.Id)" data-title="@(areaRule.AreaDetails)" name="AreaRuleIds[]" class="select_one select@(areaRule.ApplicationAreaId) select-navigation@(areaRule.MainNavigationId)"> @(areaRule.AreaRuleName)
+            </label>
+        </div>
+
+    }
+    </div>
+    </div>

@@ -1,0 +1,223 @@
+﻿@model IIKI.BaseApp.Business.Objects.RegisterViewModel
+@{
+    string menuName = "User";
+    ViewBag.Title = ViewBag.Title + menuName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a><h2>@ViewBag.Title</h2>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="ipage-content">
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="buttons-wraper ipage-buttons-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-dark btn-sm btnFormSubmit"><i class="fa fa-save"></i> Save</button>
+                        <a href="@Url.Action("Index","ManageUsers",new { area="BaseAppArea"})" class="btn btn-secondary btn-sm btnBackToList"><i class="fas fa-times"></i> Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="accordion">
+            <div class="card icard">
+                <div class="card-header">
+                    <span class="card-title">@menuName.Trim() Information</span>
+                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_Info")" aria-expanded="true"></a>
+                </div>
+                <div id="@(menuName.Trim().Replace(" ", "")+"_Info")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(m => m.FirstName, new { @class = "required-field control-label" })
+                                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.FirstName) })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.LabelFor(m => m.LastName, new { @class = "required-field control-label" })
+                                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.LastName) })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(m => m.Email, new { @class = "required-field control-label" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Email) })
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="">
+                                                    @Html.LabelFor(m => m.Password, new { @class = "required-field control-label" })
+                                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Password), @autocomplete="off" })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="">
+                                                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "required-field control-label" })
+                                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.ConfirmPassword) })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="">
+                                                    <label>Rules for Password</label>
+                                                    <ul id="Min6" class="crossList">
+                                                        <li>Minimum 6 characters</li>
+                                                    </ul>
+                                                    <ul id="Cap1" class="crossList">
+                                                        <li>At least One Capital Letter</li>
+                                                    </ul>
+                                                    <ul id="Small1" class="crossList">
+                                                        <li>At least One Small Letter</li>
+                                                    </ul>
+                                                    <ul id="Special1" class="crossList">
+                                                        <li>At least One Special Character</li>
+                                                    </ul>
+                                                    <ul id="Digit1" class="crossList">
+                                                        <li>At least One Digit</li>
+                                                    </ul>
+                                                    <ul id="PasswordMatch" class="crossList">
+                                                        <li>Password and Confirm Password should match</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(m => m.RoleName, new { @class = "required-field control-label" })
+                                    @Html.ValidationMessageFor(m => m.RoleName, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.RoleName) })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-wraper ipage-buttons-bottom">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right">
+                        <button type="submit" class="btn btn-dark btn-sm btnFormSubmit"><i class="fa fa-save"></i> Save</button>
+                        <a href="@Url.Action("Index","ManageUsers",new { area="BaseAppArea"})" class="btn btn-secondary btn-sm btnBackToList"><i class="fas fa-times"></i> Cancel</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryValidation")
+    <script>
+        $(document).ready(function () {
+
+            $("#Password").on("keyup", function () {
+                var currentString = $(this).val().trim();
+                if (currentString.length >= 6) {
+                    CheckList("Min6");
+                }
+                else {
+                    CrossList("Min6");
+                }
+
+                if (currentString.match("[A-Z]")) {
+                    CheckList("Cap1");
+                }
+                else {
+                    CrossList("Cap1");
+                }
+
+                if (currentString.match("[a-z]")) {
+                    CheckList("Small1");
+                }
+                else {
+                    CrossList("Small1");
+                }
+
+                if (/^[a-zA-Z0-9- ]*$/.test(currentString) == false) {
+                    CheckList("Special1");
+                }
+                else {
+                    CrossList("Special1");
+                }
+
+                if (currentString.match("[0-9]")) {
+                    CheckList("Digit1");
+                }
+                else {
+                    CrossList("Digit1");
+                }
+
+                MatchFields("Password", "ConfirmPassword", "PasswordMatch");
+            });
+
+            $("#ConfirmPassword").on("keyup", function () {
+                MatchFields("Password", "ConfirmPassword", "PasswordMatch");
+            });
+
+            function MatchFields(FirstField, SecondField, ListItem) {
+                if ($("#" + FirstField).val() == $("#" + SecondField).val() && $("#" + SecondField).val().length > 0) {
+                    CheckList(ListItem);
+                }
+                else {
+                    CrossList(ListItem);
+                }
+            }
+
+            function CheckList(id) {
+                if ($("#" + id).hasClass("crossList")) {
+                    $("#" + id).removeClass("crossList");
+                }
+                if (!$("#" + id).hasClass("checkList")) {
+                    $("#" + id).addClass("checkList");
+                }
+            }
+
+            function CrossList(id) {
+                if (!$("#" + id).hasClass("crossList")) {
+                    $("#" + id).addClass("crossList");
+                }
+                if ($("#" + id).hasClass("checkList")) {
+                    $("#" + id).removeClass("checkList");
+                }
+            }
+
+        })
+
+    </script>
+
+}

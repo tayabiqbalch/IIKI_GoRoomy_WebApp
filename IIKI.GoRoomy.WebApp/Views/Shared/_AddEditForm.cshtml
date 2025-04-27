@@ -1,0 +1,142 @@
+﻿@model dynamic
+@using IIKI.BaseApp.Utils;
+@using IIKI.BaseApp.Localization.Resources;
+@using System.Collections.Generic;
+@using System.Reflection;
+@using IIKI.BaseApp.Business.Objects;
+@using IIKI;
+
+@{
+    IEnumerable<PropertyInfo> props;
+    bool isSearchForm = ViewData["isSearchForm"] as bool? ?? false;
+    if (isSearchForm)
+    {
+        props = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetOrderedSearchFormProperties(Model);
+    }
+    else
+    {
+        props = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetOrderedEditFormProperties(Model);
+    }
+
+    int layoutColCount = ViewData["LayoutColCount"] as int? ?? 2;
+    string formGroupClass = "row form-group mb-3";
+}
+
+@if (props != null && props.Any())
+{
+    <div class="@formGroupClass">
+        @foreach (var prop in props)
+        {
+            BaseFieldAttribute attr = (BaseFieldAttribute)prop.GetCustomAttribute(typeof(BaseFieldAttribute), true);
+
+            if (attr != null)
+            {
+                string lableExtraClass = "";
+                if (attr.RenderMode.In(IIKI.BaseApp.Common.InputRenderModes.Checkbox, IIKI.BaseApp.Common.InputRenderModes.CheckboxOnOffButton))
+                {
+                    lableExtraClass = "mt-4";
+                }
+
+                <div class="col-md-@((attr.BootstrapLayoutCol > 0 ? attr.BootstrapLayoutCol : 12/layoutColCount))">
+
+                    @Html.LabelExtented(prop.Name, new { @class = $"control-label {lableExtraClass}" })
+                    @Html.ValidationMessage(prop.Name, "", new { @class = "text-danger" })
+
+                    @switch (attr.RenderMode)
+                    {
+                        @*case IIKI.BaseApp.Common.InputRenderModes.Hidden:
+                            @Html.Hidden(prop.Name, null)
+                            break;*@
+                        case IIKI.BaseApp.Common.InputRenderModes.Readonly when prop.GetValue(Model, null) != null:
+                            <span class="form-control disabled">@Html.Display(prop.Name)</span>
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.Textbox:
+                            @Html.TextBox(prop.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(prop.Name) })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxNumber:
+                            @Html.TextBox(prop.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(prop.Name), @Type = "number" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxDecimal:
+                            @Html.TextBox(prop.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(prop.Name), @Type = "number", @Step = "Any" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxCurrency:
+                            <div class="input-group">
+                                @Html.TextBox(prop.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(prop.Name) })
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fa fa-money-bill"></i></div>
+                                </div>
+                            </div>
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxPercentage:
+                            <div class="input-group">
+                                @Html.TextBox(prop.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(prop.Name) })
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fa fa-percent"></i></div>
+                                </div>
+                            </div>
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxDate:
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxDateTime:
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxDateTime2:
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxDateTimeOffset:
+                        case IIKI.BaseApp.Common.InputRenderModes.TextboxTime:
+
+                            @Html.TextBox(prop.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name) + "DatePicker", @placeholder = @Html.DisplayName(prop.Name), @type = (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDate ? "date" : attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDateTime ? "datetime-local" : attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxTime ? "time" : "text") })
+
+                            @*<div class="input-group datepicker" id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name)DatePicker" data-bs-target-input="nearest">
+                                    @Html.TextBox(prop.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name) + "DatePicker", @placeholder = @Html.DisplayName(prop.Name) })
+                                    <div class="input-group-append" data-target="#@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name)DatePicker" data-bs-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>*@
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.Textarea:
+                        case IIKI.BaseApp.Common.InputRenderModes.TextareaHTMLEditor:
+                            @Html.TextArea(prop.Name, null, new { @class = $"form-control {(attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextareaHTMLEditor ? "text-area-tiny" : "text-area")}", @placeholder = @Html.DisplayName(prop.Name), @rows = "4", @cols = "40" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.Checkbox:
+                            @Html.CheckBox(prop.Name, new { @class = "checkbox" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.CheckboxOnOffButton:
+                            @Html.CheckBox(prop.Name, new { @class = "checkBoxField" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.Radiobutton:
+                            @Html.RadioButton(prop.Name, new { @class = "radiobutton" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.Dropdown when TempData[prop.Name + "List"] != null:
+                            var list = TempData[prop.Name + "List"] as List<IIKI.BaseApp.Common.CommonObjects.DropDownSelectItem>;
+                            var selectedVal = list.Where(x => x.Selected).FirstOrDefault()?.Value;
+                            @Html.DropDownList($"{prop.Name}", new SelectList(list, "Value", "Text", selectedVal), IIKI.BaseApp.Localization.Resources.CommonLabels.PleaseSelect, new { @class = "form-control", @data_placeholder = IIKI.BaseApp.Localization.Resources.CommonLabels.PleaseSelect, @data_allow_clear = "true" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.DropdownSearchable when TempData[prop.Name + "List"] != null:
+                            @Html.DropDownList(prop.Name, new SelectList(TempData[prop.Name + "List"] as List<IIKI.BaseApp.Common.CommonObjects.DropDownSelectItem>, "Value", "Text"), new { @class = "form-control js-select2", @data_placeholder = IIKI.BaseApp.Localization.Resources.CommonLabels.PleaseSelect, @data_allow_clear = "true" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.InputMultiselect when TempData[prop.Name + "List"] != null:
+                            @Html.ListBox(prop.Name + "[]", new MultiSelectList(TempData[prop.Name + "List"] as List<IIKI.BaseApp.Common.CommonObjects.DropDownSelectItem>, "Value", "Text", prop.GetValue(Model, null)), new { id = prop.Name, @class = "form-control js-select2", multiple = "multiple", @data_placeholder = IIKI.BaseApp.Localization.Resources.CommonLabels.PleaseSelect, @data_allow_clear = "true" })
+                            break;
+                        case IIKI.BaseApp.Common.InputRenderModes.FileUpload:
+                            <div class="text-center">
+                                <img id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name)Preview" src="@Convert.ToString(TempData["UploadedFilePath"])" onerror="this.src = '/Images/Your-Logo.png';" style="max-height:250px;max-width:250px;" />
+                            </div>
+                            <div class="text-center">
+                                <div class="fileUpload btn btn-primary">
+                                    <i class="fa fa-upload"></i> Upload Logo
+                                    <input id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name)" type="file" name="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(prop.Name)Upload" class="upload">
+                                </div>
+                            </div>
+                            break;
+                    }
+                </div>
+
+                if ((props.ToList().IndexOf(prop) + 1) % layoutColCount == 0) // Correct row closing logic
+                {
+                    @Html.Raw($"</div><div class=\"{@formGroupClass}\">")
+                }
+            }
+        }
+        @if ((props.Count() % layoutColCount) != 0) // Close the last row if needed
+        {
+            @Html.Raw("</div>")
+        }
+    </div>
+}

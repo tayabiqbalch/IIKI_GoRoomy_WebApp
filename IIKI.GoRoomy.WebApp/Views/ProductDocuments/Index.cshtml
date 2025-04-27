@@ -1,0 +1,107 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@model IEnumerable<ProductDocument>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = ViewBag.Product.ProductName + " " + IIKI.BaseApp.Localization.Resources.DocumentLabels.Title;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a><h2>@ViewBag.Title</h2>
+        <small>List of @ViewBag.Title.ToLower()</small>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class=" ipage-content">
+    @Html.Partial("_AlertMessage")
+    <div class="ipage-buttons-top  ibuttons">
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" float-right">
+                    @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing) { Id = 0, IsModalPopup = true, IsPopupFormSubmit = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", AddEditURL = Url.Action("AddEdit", new { ProductId = ViewBag.Product.Id }), GetModalURL = Url.Action("_AddEditSubmitModal", new { ProductId = ViewBag.Product.Id }), IsDisplayCreateButton = false, IsDisplayCreateModalButton = true })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="table-records-responsive">
+                        <table id="RecordsListTable" class="jq-dt-records-table table responsive nowrap table-hover table-sm ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DocumentName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DocumentTypeId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IsPrimary)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RecordStatus)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DocumentName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DocumentTypeName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IsPrimary)
+                                        </td>
+                                        <td>
+                                            @Html.Partial("_RecordStatusPartial", new RecordStatusPartialViewModel() { Id = item.Id, RecordStatus = item.RecordStatus })
+
+                                        </td>
+                                        <td>
+                                            @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing) { Id = item.Id, IsModalPopup = true, IsPopupFormSubmit = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", AddEditURL = Url.Action("AddEdit", new { Id = item.Id }), GetModalURL = Url.Action("_AddEditModal", new { Id = item.Id }), IsDisplayModalEditButton = false, IsDisplayEditButton = false, IsDisplayRemoveButton = true })
+                                            <a href="@(IIKI.BaseApp.Common.CommonFunctions.GetConfigurationAppSettings("ProductDocumentsPath")+item.DocumentPath)" target="_blank" class="btn btn-xs btn-dark"><i class="fa fa-download"></i> Download</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_AddEditSubmitModalPopup", new IIKI.BaseApp.Business.Objects.AddEditModalPopupViewModel() { Id = 0, ButtonType = "submit", IsDisplaySaveAddButton = true })
+
+@Html.Partial("_DeleteRecordForm", new IIKI.BaseApp.Business.Objects.DeleteRecordFormViewModel() { FormActionName = IIKI.BaseApp.Common.CommonStatus.DeleteFormOptions.RemoveRecordFormActionName })
+
+<input type="hidden" id="SearchDataTableRecordsURL" name="SearchDataTableRecordsURL" value="@Url.Action("SearchDataTableRecords",currentControllerName)" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryValidation")
+    <script>
+        SetJqueryDatatable('RecordsListTable', [4], [4]);
+        $(document).ready(function () {
+
+
+        });
+    </script>
+}
+

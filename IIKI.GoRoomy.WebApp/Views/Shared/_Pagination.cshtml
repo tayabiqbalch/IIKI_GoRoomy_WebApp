@@ -1,0 +1,26 @@
+﻿@model IIKI.GoRoomy.WebApp.Models.PageViewModel
+
+@if(Model.TotalRecords == 0)
+{
+    return;
+}
+
+<ul class="pagination" style="padding:0px; margin:0px;">
+    <li class="footable-page-arrow @(Model.PageNumber == 1 ? "disabled" : "")">
+        <a href="#first" class="@(Model.PageNumber == 1 ? "disabled" : "PagingButton")" data-page="1">«</a>
+    </li>
+    <li class="footable-page-arrow @(Model.PageNumber == 1 ? "disabled" : "")">
+        <a href="#prev" class="@(Model.PageNumber == 1 ? "disabled" : "PagingButton")" data-page="@(Model.PageNumber - 1)">‹</a>
+    </li>
+    @for (long i = Model.PageFrom; i <= Model.PageTo; i++) {
+        <li class="footable-page @(Model.PageNumber == i ? "active" : "")">
+            <a href="#" class="@(Model.PageNumber == i ? "active" : "PagingButton")" data-page="@(i)">@(i)</a>
+        </li>
+    }
+    <li class="footable-page-arrow @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+        <a href="#next" class="@(Model.PageNumber == Model.TotalPages ? "disabled" : "PagingButton")" data-page="@(Model.PageNumber + 1)">›</a>
+    </li>
+    <li class="footable-page-arrow @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+        <a href="#last" class="@(Model.PageNumber == Model.TotalPages ? "disabled" : "PagingButton")" data-page="@(Model.TotalPages)">»</a>
+    </li>
+</ul>

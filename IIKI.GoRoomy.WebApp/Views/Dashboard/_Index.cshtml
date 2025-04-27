@@ -1,0 +1,364 @@
+﻿@{
+    ViewBag.Title = "Super Admin Dashboard";
+}
+
+<div class="card ipage-header  transition animated fadeIn ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a><h2>@ViewBag.Title</h2>
+        <small>Summary of Today's all activities</small>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Dashboard",new { area="Admin"})">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class=" ipage-content home-dashboard">
+    <div class="dashboard-info">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua"><i class="fa fa-shopping-cart"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-number">90<small>%</small></span>
+                        <span class="info-box-text">Sale</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red">
+                        <i class="fas fa-object-group"></i>
+                    </span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-number">123</span>
+                        <span class="info-box-text">Sold Items</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-green">
+                        <i class="fas fa-address-card"></i>
+                    </span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-number">123</span>
+                        <span class="info-box-text">Customers</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-yellow">
+                        <i class="fas fa-address-book"></i>
+                    </span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-number">123</span>
+                        <span class="info-box-text">Vendors</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-behance content-center">
+                    <i class="fab fa-behance icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-dribbble content-center">
+                    <i class="fab fa-dribbble icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-facebook content-center">
+                    <i class="fab fa-facebook icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-flickr content-center">
+                    <i class="fab fa-flickr icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-github content-center">
+                    <i class="fab fa-github icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-instagram content-center">
+                    <i class="fab fa-instagram icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-linkedin content-center">
+                    <i class="fab fa-linkedin icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-pinterest content-center">
+                    <i class="fab fa-pinterest icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-reddit content-center">
+                    <i class="fab fa-reddit icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-tumblr content-center">
+                    <i class="fab fa-tumblr icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-twitter content-center">
+                    <i class="fab fa-twitter icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-vimeo content-center">
+                    <i class="fab fa-vimeo icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-vk content-center">
+                    <i class="fab fa-vk icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-xing content-center">
+                    <i class="fab fa-xing icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-yahoo content-center">
+                    <i class="fab fa-yahoo icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+            <div class="card" style="max-width: 18rem;">
+                <div class="card-header bg-youtube content-center">
+                    <i class="fab fa-youtube icon text-white"></i>
+                </div>
+                <div class="card-body row text-center">
+                    <div class="col">
+                        <div class="text-value-xl">89k</div>
+                        <div class="text-uppercase text-muted small">friends</div>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="col">
+                        <div class="text-value-xl">459</div>
+                        <div class="text-uppercase text-muted small">feeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

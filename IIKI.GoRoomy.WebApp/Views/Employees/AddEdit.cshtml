@@ -1,0 +1,262 @@
+﻿@model IIKI.BaseApp.Business.Objects.EmployeeViewModel
+@using System.Security.Claims;
+@using IIKI.GoRoomy.WebApp.Utility;
+@using IIKI.BaseApp.Localization.Resources;
+@using Microsoft.AspNet.Identity
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string menuName = EmployeeLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    var UserIdentity = (ClaimsIdentity)Context.User.Identity;
+    var CurrentUser = UserIdentity.GetUserInfo();
+
+    if (Model != null)
+    {
+        Model.ContactViewModel.Contact.BootstrapUIColVal = Model.BootstrapUIColVal;
+        Model.AddressViewModel.Address.BootstrapUIColVal = Model.BootstrapUIColVal;
+    }
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+}
+
+<div class="card ipage-header  transition animated fadeIn  ">
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href="">
+            <div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div>
+        </a><h2>@ViewBag.Title</h2>
+        <div class="float-right">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index")">@EmployeeLabels.Title</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="ipage-content">
+
+    @using (Html.BeginForm("AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data", @class = "tab-validation", @id = "AddEditForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Employee.Id)
+        @Html.HiddenFor(model => model.Employee.ContactId)
+        @Html.HiddenFor(model => model.Employee.UserId)
+        @Html.HiddenFor(model => model.Employee.CreatedBy)
+        @Html.HiddenFor(model => model.Employee.CreatedDate)
+        <div class="buttons-wraper ipage-buttons-top">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right">
+                        @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = Model.Employee.Id, IsDisplaySaveButton = true, IsDisplaySaveAddButton = true, IsDisplayCancelButton = true, SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit, BackURL = Url.Action("Index") })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card icard">
+            <div class="card-body">
+                <ul class="nav nav-tabs itabs nav-pills" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link px-5 active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Personal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-5" id="about-tab" data-bs-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-5" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Address</a>
+                    </li>
+                    @*@if (Convert.ToBoolean(IIKI.BaseApp.Common.CommonFunctions.GetConfigurationAppSettings("AllowtoCreateEmployeeUser")))
+                        {*@
+                    <li class="nav-item">
+                        <a class="nav-link px-5 " id="loginInfo-tab" data-bs-toggle="tab" href="#loginInfo" role="tab" aria-controls="loginInfo" aria-selected="false">Login</a>
+                    </li>
+                    @*}*@
+
+                </ul>
+
+
+                <div class="tab-content tab-validate mt-2">
+                    <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                        <div id="accordion">
+                            <div class="card icard">
+                                <div class="card-header">
+                                    <span class="card-title">@menuName Information</span>
+                                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_Info")" aria-expanded="true"></a>
+                                </div>
+                                <div id="@(menuName.Trim().Replace(" ", "")+"_Info")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+
+                                            @Html.Partial("_ContactAddEditPartial", Model.ContactViewModel)
+                                            <div class="row form-group">
+                                                <div class="col-md-@Model.BootstrapUIColVal">
+                                                    @Html.LabelFor(model => model.Employee.JobTitle, htmlAttributes: new { @class = "control-label" })
+                                                    @Html.ValidationMessageFor(model => model.Employee.JobTitle, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Employee.JobTitle, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Employee.JobTitle) } })
+                                                </div>
+                                                @if (Model.BootstrapUIColVal == 12)
+                                                { @Html.Raw("</div><div class=\"row form-group\">") }
+                                                <div class="col-md-@Model.BootstrapUIColVal">
+                                                    @Html.LabelFor(model => model.Employee.HiringDate, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Employee.HiringDate, "", new { @class = "text-danger" })
+                                                    <div class="input-group date datetimepicker" id="HiringDatePicker" data-target-input="nearest">
+                                                        @Html.EditorFor(model => model.Employee.HiringDate, new { htmlAttributes = new { @class = "form-control datetimepicker-input", @data_target = "#BirthDatePicker", @placeholder = @Html.DisplayNameFor(model => model.Employee.HiringDate) } })
+                                                        <div class="input-group-append" data-bs-target="#HiringDatePicker" data-bs-toggle="datetimepicker">
+                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if (Model.BootstrapUIColVal == 12 || Model.BootstrapUIColVal == 6)
+                                                { @Html.Raw("</div><div class=\"row form-group\">") }
+                                                
+                                                <div class="col-md-@Model.BootstrapUIColVal">
+
+                                                    @Html.LabelFor(model => model.Employee.SalaryType, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Employee.SalaryType, "", new { @class = "text-danger" })
+                                                    <select id="Employee_SalaryType" name="Employee.SalaryType" class="form-control">
+                                                        <option value="0" @(Model != null && Model.Employee != null && Model.Employee.SalaryType == 0 ? "selected" : "")>Hourly</option>
+                                                        <option value="1" @(Model != null && Model.Employee != null && Model.Employee.SalaryType == 1 ? "selected" : "")>Salaried</option>
+                                                    </select>
+
+                                                </div>
+                                                @if (Model.BootstrapUIColVal == 12 || Model.BootstrapUIColVal == 4)
+                                                { @Html.Raw("</div><div class=\"row form-group\">") }
+                                                <div class="col-md-@Model.BootstrapUIColVal">
+
+                                                    @Html.LabelFor(model => model.Employee.EmployeeType, htmlAttributes: new { @class = "control-label required-field" })
+                                                    @Html.ValidationMessageFor(model => model.Employee.EmployeeType, "", new { @class = "text-danger" })
+                                                    @Html.DropDownListFor(model => model.Employee.EmployeeType, new SelectList(Model.EmployeeTypes, "Value", "Text"), new { @class = "form-control" })
+
+                                                </div>
+                                                
+                                                @if (Model.BootstrapUIColVal == 12)
+                                                { @Html.Raw("</div><div class=\"row form-group\">") }
+                                                <div class="col-md-@Model.BootstrapUIColVal mt-2rem">
+                                                    @Html.LabelFor(model => model.Employee.IsActive, htmlAttributes: new { @class = "control-label-q" })
+                                                    @Html.ValidationMessageFor(model => model.Employee.IsActive, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.Employee.IsActive, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsActive" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="aboutInfo-tab">
+                        <div id="accordion">
+                            <div class="card icard">
+                                <div class="card-header">
+                                    <span class="card-title">About @menuName</span>
+                                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_AboutInfo")" aria-expanded="true"></a>
+                                </div>
+                                <div id="@(menuName.Trim().Replace(" ", "")+"_AboutInfo")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+
+                                                    @Html.LabelFor(model => model.ContactViewModel.Contact.AboutContact, htmlAttributes: new { @class = "control-label" })
+                                                    @Html.ValidationMessageFor(model => model.ContactViewModel.Contact.AboutContact, "", new { @class = "text-danger" })
+
+                                                    @*<textarea class="form-control text-area-tiny" id="Contact_AboutContact" name="Contact.AboutContact" placeholder = "@Html.DisplayNameFor(model => model.ContactViewModel.Contact.AboutContact)" style="resize: none;" rows="3">@Html.DisplayFor(model => model.ContactViewModel.Contact.AboutContact)</textarea>*@
+
+                                                    @Html.TextAreaFor(model => model.ContactViewModel.Contact.AboutContact, new { @class = "form-control text-area-tiny", @placeholder = @Html.DisplayNameFor(model => model.ContactViewModel.Contact.AboutContact) })
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                        <div id="accordion">
+                            <div class="card icard">
+                                <div class="card-header">
+                                    <span class="card-title">@menuName Default Address</span>
+                                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_Address")" aria-expanded="true"></a>
+                                </div>
+                                <div id="@(menuName.Trim().Replace(" ", "")+"_Address")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <!-- Address-->
+
+                                            @Html.Partial("_AddressAddEditPartial", Model.AddressViewModel)
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="loginInfo" role="tabpanel" aria-labelledby="loginInfo-tab">
+                        <div id="accordion">
+                            <div class="card icard">
+                                <div class="card-header">
+                                    <span class="card-title">@menuName Login Info</span>
+                                    <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(menuName.Trim().Replace(" ", "")+"_LoginInfo")" aria-expanded="true"></a>
+                                </div>
+                                <div id="@(menuName.Trim().Replace(" ", "")+"_LoginInfo")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="form-horizontal">
+                                            <!-- Address-->
+
+                                            @Html.Partial("_LoginInfoAddEditPartial", Model.ContactViewModel)
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="buttons-wraper ipage-buttons-bottom">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-right">
+                        @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = Model.Employee.Id, IsDisplaySaveButton = true, IsDisplaySaveAddButton = true, IsDisplayCancelButton = true, SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit, BackURL = Url.Action("Index") })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<input type="hidden" id="hdnGetSubCasteJsonURL" value="@Url.Action("GetSubCasteJson","Castes")" />
+
+@section Scripts {
+    
+    @Scripts.Render("~/bundles/Tinymce")
+    <script>
+
+        $(document).ready(function () {
+
+            $("#Contact_CasteId").change(function (evt) {
+                LoadSubDropDownListAjax('POST', $("#Contact_CasteId").val(), $("#hdnGetSubCasteJsonURL").val(), 'Contact_SubCasteId', $("#Contact_SelectedSubCasteId").val(), true, false);
+            });
+
+            $("#Contact_EmailAddress").keyup(function (e) {
+                $("#Contact_LoginEmail").val($(this).val());
+            });
+        });
+
+    </script>
+}

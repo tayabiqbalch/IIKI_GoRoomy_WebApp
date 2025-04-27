@@ -1,0 +1,31 @@
+﻿@model IIKI.BaseApp.Business.Objects.GridViewModel
+@using IIKI.BaseApp.Utils;
+@using System.Reflection;
+@using IIKI.BaseApp.Business.Objects;
+@{ 
+    string initAddEditURL = Model.GridButtonsViewModel.AddEditURL.Replace("%7B0%7D", "{0}");
+    string initGetModalURL = Model.GridButtonsViewModel.GetModalURL.Replace("%7B0%7D", "{0}");
+}
+<tbody>
+    @foreach (object item in Model.ModelList)
+    {
+        long recordID = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetRecordId(item);
+        Model.GridButtonsViewModel.Id = recordID;
+        if (!string.IsNullOrWhiteSpace(initAddEditURL))
+        {
+            Model.GridButtonsViewModel.AddEditURL = string.Format(initAddEditURL, recordID);
+        }
+        if (!string.IsNullOrWhiteSpace(initGetModalURL))
+        {
+            Model.GridButtonsViewModel.GetModalURL = string.Format(initGetModalURL, recordID);
+        }
+        @Html.Raw("<tr>")
+        @Html.Partial("_GridCols", item)
+        @Html.Raw("<td>")
+        @Html.Partial("_Buttons", Model.GridButtonsViewModel)
+        @Html.Raw("</td>")
+
+        @Html.Raw("</tr>")
+    }
+</tbody>
+

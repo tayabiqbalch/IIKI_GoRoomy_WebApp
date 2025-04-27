@@ -1,0 +1,139 @@
+﻿@model PageContentViewModel
+@using System.Reflection;
+@using IIKI.BaseApp.Business.Objects;
+@{
+    string formId = string.Empty;
+    if (Model.PageType == (int)IIKI.BaseApp.Common.PageTypes.AddEdit)
+    {
+        Model.AddEditFormSubmitURL = string.Format(Model.AddEditFormSubmitURL, Model.Id);
+        formId = IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(Model.AddEditFormSubmitURL);
+    }
+}
+
+<div class="ipage-content">
+    <div class="ipage-content-body">
+
+        @if (Model.PageType == (int)IIKI.BaseApp.Common.PageTypes.Listing)
+        {
+            @Html.Partial("_AlertMessage")
+            <div class="ipage-buttons-top  ibuttons">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class=" float-right">
+                            @Html.Partial("_Buttons", Model.ButtonsViewModel)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            @Html.Partial("_Grid", Model.GridViewModel)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            if (Model.EnableFormTag)
+            {
+                @Html.Raw($"<form action=\"{Model.AddEditFormSubmitURL}\" method=\"{FormMethod.Post}\" role=\"form\" class=\"needs-validation\" novalidate=\"novalidate\" id=\"{@formId}\">")
+
+                //using (Html.BeginRouteForm(Model.AddEditFormSubmitURL, FormMethod.Post, new { role = "form", @class = "needs-validation", @novalidate = "novalidate", @id = $"{formId}" }))
+                //using (Html.BeginForm(Model.PostActionMethodName, Model.ControllerName, new { Area = Model.AreaName }, FormMethod.Post, new { role = "form", @class = "needs-validation", @novalidate = "novalidate", @id = $"{formId}" }))
+                //{
+
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+            }
+            <div class="buttons-wraper ipage-buttons-top">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="float-right">
+                            @Html.Partial("_Buttons", Model.ButtonsViewModel)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="accordion">
+                <div class="card icard">
+                    <div class="card-header">
+                        <span class="card-title">@Model.MenuName Information</span>
+                        <a class="collapse-icon" data-bs-toggle="collapse" data-bs-target="#@(Model.MenuName.Trim().Replace(" ", "") + "_Info")" aria-expanded="true"></a>
+                    </div>
+                    <div id="@(Model.MenuName.Trim().Replace(" ", "") + "_Info")" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="form-horizontal">
+                                @if (Model.Model is AddressViewModel)
+                                {
+                                    @Html.Partial("_AddressAddEditPartial", Model.Model)
+                                }
+                                else
+                                {
+                                    IEnumerable<PropertyInfo> props = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetHiddenFields(Model.Model);
+                                    if (props != null && props.Any())
+                                    {
+                                        foreach (var prop in props)
+                                        {
+                                            @Html.ValidationMessage(prop.Name, "", new { @class = "text-danger" })
+                                            @Html.Hidden(prop.Name, prop.GetValue(Model.Model, null))
+                                        }
+                                    }
+                                    @Html.Partial("_AddEditForm", Model.Model, new ViewDataDictionary { { "LayoutColCount", 2 }, { "isSearchForm", false } })
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-wraper ipage-buttons-bottom">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="float-right">
+
+                            @Html.Partial("_Buttons", Model.ButtonsViewModel)
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            if (Model.EnableFormTag)
+            {
+                @Html.Raw("</form>")
+
+                @*}*@
+            }
+
+        }
+
+    </div>
+</div>
+@if (Model.PageType == (int)IIKI.BaseApp.Common.PageTypes.Listing)
+{
+    if (Model.DrawDeleteForm)
+    {
+
+        /*Delete Form*/
+        <div class="delete-form hidden">
+            @Html.Partial("_DeleteRecordForm", Model.DeleteRecordFormViewModel)
+        </div>
+        /*End Delete Form*/
+    }
+    if (Model.DrawRemoveForm)
+    {
+
+        /*Delete Form*/
+        <div class="delete-form hidden">
+            @Html.Partial("_DeleteRecordForm", Model.RemoveRecordFormViewModel)
+        </div>
+        /*End Delete Form*/
+    }
+    <input type="hidden" id="SearchDataTableRecordsURL" name="SearchDataTableRecordsURL" value="@Url.Action("SearchDataTableRecords", Model.ControllerName)" />
+}
+

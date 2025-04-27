@@ -1,0 +1,60 @@
+﻿@using IIKI.BaseApp.Localization.Resources;
+@using IIKI.BaseApp.Business.Objects;
+@model AddEditModalPopupViewModel
+@{
+
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+@using (Html.BeginForm("_AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", @class = "", @id = "AddEditForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    <!-- Modal -->
+    <div class="modal imodal fade" id="@Model.ModalFormId" tabindex="-1" role="dialog" aria-labelledby="@(Model.ModalFormId)Title" aria-hidden="true">
+        <div class="modal-dialog modal-popup-@Model.PopupSize.ToString().ToLower() modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <span class="modal-title" id="@(Model.ModalFormId)Title">@ViewBag.Title</span>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    @Html.Partial("_AddEditForm", Model.Model, new ViewDataDictionary { { "ActionName", "_AddEdit" }, { "LayoutColCount", 2 } })
+
+                </div>
+
+                <div class="modal-footer" id="@(Model.ModalFormId)ButtonFooter">
+                    @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit, true) { Id = 0, IsModalPopup = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", GetModalURL = Url.Action("_AddEditModal", new { Id = 0 }), SaveButtonType = Model.IsFormSubmit ? IIKI.BaseApp.Common.ButtonTypes.Submit : IIKI.BaseApp.Common.ButtonTypes.Button, IsDisplayModalSaveButton = true, IsDisplayModalCancelButton = true, IsDisplayModalSaveAddButton = true, IsReload = true })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryValidation")
+<script>
+    $(document).ready(function () {
+        $(".js-select2").select2({ closeOnSelect: false, allowClear: true, });
+
+        $('.checkBoxField').checkboxpicker({
+            cls: 'btn-sm',
+            groupCls: 'btn-group-sm',
+        });
+
+        $(".checkBoxField").on("change", function () {
+            console.log($(this).attr('data-fieldName'));
+
+            console.log($(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val());
+
+            $(this).parent().parent().find("#" + $(this).attr('data-fieldName') + ":hidden").val($(this).is(':checked'));
+        });
+
+        return false;
+    });
+
+</script>

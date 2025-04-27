@@ -1,0 +1,104 @@
+﻿
+@using IIKI.BaseApp.Business.Objects;
+@model AddressViewModel
+
+
+@Html.HiddenFor(model => model.Address.Id)
+@Html.HiddenFor(model => model.EntityAddress.Id)
+@Html.HiddenFor(model => model.EntityAddress.EntityId)
+@Html.HiddenFor(model => model.EntityAddress.EntityTypeId)
+@Html.HiddenFor(model => model.EntityAddress.AddressId)
+@Html.HiddenFor(model => model.EntityAddress.CreatedBy)
+@Html.HiddenFor(model => model.EntityAddress.CreatedDate)
+@{
+    //Model.Address.BootstrapUIColVal = 2;
+}
+<div class="row form-group mb-3">
+    <div class="col-12">
+        @Html.LabelFor(model => model.Address.AddressTypeId, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.AddressTypeId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Address.AddressTypeId, new SelectList(Model.Address.AddressTypes, "Id", "AddressTypeName"), "--SELECT--", new { @class = "form-control" })
+    </div>
+</div>
+<div class="row form-group mb-3">
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.AddressLine1, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.AddressLine1, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Address.AddressLine1, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Address.AddressLine1) } })
+    </div>
+    @if (Model.Address.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.AddressLine2, htmlAttributes: new { @class = "control-label" })
+        @Html.ValidationMessageFor(model => model.Address.AddressLine2, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Address.AddressLine2, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Address.AddressLine2) } })
+    </div>
+    @if (Model.Address.BootstrapUIColVal == 12 || Model.Address.BootstrapUIColVal == 6)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.AddressLine1Urdu, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.AddressLine1Urdu, "", new { @class = "text-danger" })
+        <div class="keyboard-wrapperRTL">
+            @Html.EditorFor(model => model.Address.AddressLine1Urdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir = "rtl", @placeholder = @Html.DisplayNameFor(model => model.Address.AddressLine1Urdu) } })
+        </div>
+    </div>
+    @if (Model.Address.BootstrapUIColVal == 12 || Model.Address.BootstrapUIColVal == 4)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.AddressLine2Urdu, htmlAttributes: new { @class = "control-label" })
+        @Html.ValidationMessageFor(model => model.Address.AddressLine2Urdu, "", new { @class = "text-danger" })
+        <div class="keyboard-wrapperRTL">
+            @Html.EditorFor(model => model.Address.AddressLine2Urdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir = "rtl", @placeholder = @Html.DisplayNameFor(model => model.Address.AddressLine2Urdu) } })
+        </div>
+    </div>
+
+    @if (Model.Address.BootstrapUIColVal == 12 || Model.Address.BootstrapUIColVal == 6 || Model.Address.BootstrapUIColVal == 3)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.City, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.City, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Address.City, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Address.City) } })
+    </div>
+
+    @if (Model.Address.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.Province, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.Province, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Address.Province, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Address.Province) } })
+    </div>
+    @if (Model.Address.BootstrapUIColVal == 12 || Model.Address.BootstrapUIColVal == 6 || Model.Address.BootstrapUIColVal == 4 || Model.Address.BootstrapUIColVal == 2)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.CityUrdu, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.CityUrdu, "", new { @class = "text-danger" })
+        <div class="keyboard-wrapperRTL">
+            @Html.EditorFor(model => model.Address.CityUrdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir = "rtl", @placeholder = @Html.DisplayNameFor(model => model.Address.CityUrdu) } })
+        </div>
+    </div>
+    @if (Model.Address.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.ProvinceUrdu, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.ProvinceUrdu, "", new { @class = "text-danger" })
+        <div class="keyboard-wrapperRTL">
+            @Html.EditorFor(model => model.Address.ProvinceUrdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir = "rtl", @placeholder = @Html.DisplayNameFor(model => model.Address.ProvinceUrdu) } })
+        </div>
+    </div>
+
+    @if (Model.Address.BootstrapUIColVal == 12 || Model.Address.BootstrapUIColVal == 6 || Model.Address.BootstrapUIColVal == 3)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.ZipCode, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.ZipCode, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Address.ZipCode, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Address.ZipCode) } })
+    </div>
+
+    @if (Model.Address.BootstrapUIColVal == 12 || Model.Address.BootstrapUIColVal == 4)
+    {@Html.Raw("</div><div class=\"row form-group mb-3\">")}
+    <div class="col-md-@Model.Address.BootstrapUIColVal">
+        @Html.LabelFor(model => model.Address.CountryId, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Address.CountryId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Address.CountryId, new SelectList(Model.Address.Countries, "Id", "CountryName"), "--SELECT--", new { @class = "form-control" })
+    </div>
+</div>

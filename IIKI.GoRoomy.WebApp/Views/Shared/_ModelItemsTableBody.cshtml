@@ -1,0 +1,26 @@
+﻿@model dynamic
+@using IIKI.BaseApp.Utils;
+@using System.Reflection;
+@using IIKI.BaseApp.Business.Objects;
+@{
+    IEnumerable<PropertyInfo> props = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetOrderedTableProperties(Model);
+
+    long recordID = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetRecordId(Model);
+}
+
+@if (props != null && props.Any())
+{
+    @Html.Raw("<tr>")
+
+    foreach (var p in props)
+    {
+        @Html.Raw("<td>")
+        @Html.Display(p.Name)
+        @Html.Raw("</td>")
+    }
+    @Html.Raw("<td>")
+    @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing) { Id = recordID, IsModalPopup = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", AddEditURL = Url.Action("AddEdit", new { Id = recordID }), GetModalURL = Url.Action("_AddEditModal", new { Id = recordID }), IsDisplayModalEditButton = true, IsDisplayEditButton = true, IsDisplayRemoveButton = true })
+    @Html.Raw("</td>")
+
+    @Html.Raw("</tr>")
+}

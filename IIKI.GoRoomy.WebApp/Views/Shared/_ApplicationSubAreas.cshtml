@@ -1,0 +1,18 @@
+﻿@model List<IIKI.BaseApp.Business.Objects.UserApplicationArea>
+
+@foreach (var appArea in Model)
+{
+    <div class="col-sm-12">
+        <label class="">
+            <input data-id="@(appArea.Id)" type="checkbox" value="@(appArea.Id)" data-title="@(appArea.ApplicationAreaName)" class="select_all selectall@(appArea.Id)"> @(appArea.ApplicationAreaName)
+        </label>
+    </div>
+    if (appArea.AreaRules != null && appArea.AreaRules.Count > 0)
+    {
+        @Html.Partial("_AreaRules", appArea.AreaRules)
+    }
+    if (appArea.SubAreas != null && appArea.SubAreas.Count > 0)
+    {
+        @Html.Partial("_ApplicationSubAreas", appArea.SubAreas)
+    }
+}

@@ -1,0 +1,29 @@
+﻿@model IIKI.BaseApp.Business.Objects.RecordStatusPartialViewModel
+@if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Active)
+{
+    <span>@IIKI.BaseApp.Localization.Resources.RecordStatusLabels.Active</span>
+}
+else if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.InActive)
+{
+    <span>@IIKI.BaseApp.Localization.Resources.RecordStatusLabels.InActive</span>
+}
+else if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Deleted)
+{
+    <span> @IIKI.BaseApp.Localization.Resources.RecordStatusLabels.Deleted </span>
+}
+else if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Confirmed)
+{
+    <span> @IIKI.BaseApp.Localization.Resources.RecordStatusLabels.Confirmed </span>
+}
+else if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Saved)
+{
+    <span> @IIKI.BaseApp.Localization.Resources.RecordStatusLabels.Saved </span>
+}
+else if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Blocked)
+{
+    <span> @IIKI.BaseApp.Localization.Resources.RecordStatusLabels.Blocked </span>
+}
+else if (Model.RecordStatus == IIKI.BaseApp.Common.CommonStatus.RecordStatus.Disabled)
+{
+    <span> @IIKI.BaseApp.Localization.Resources.RecordStatusLabels.Disabled </span>
+}

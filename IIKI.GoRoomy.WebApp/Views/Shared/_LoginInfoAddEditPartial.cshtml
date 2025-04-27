@@ -1,0 +1,78 @@
+﻿
+@using IIKI.BaseApp.Business.Objects;
+@model ContactViewModel
+@*@if (Model.Contact.Id <= 0)
+    {*@
+<div class="row form-group">
+    <div class="col-md-@(Model.Contact.Id<=0?"12":"8")">
+        @Html.LabelFor(model => model.Contact.LoginEmail, htmlAttributes: new { @class = "control-label required-field" })
+        @Html.ValidationMessageFor(model => model.Contact.LoginEmail, "", new { @class = "text-danger" })
+        @if (Model.Contact.Id > 0)
+        {
+            @Html.EditorFor(model => model.Contact.LoginEmail, new { htmlAttributes = new { @class = "form-control", @Readonly = "readonly", @placeholder = @Html.DisplayNameFor(model => model.Contact.LoginEmail),@AutoComplete= "nope" } })
+        }
+        else
+        {
+            @Html.EditorFor(model => model.Contact.LoginEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.LoginEmail), @AutoComplete = "nope" } })
+        }
+    </div>
+    <div class="col-md-4 mt-4 @(Model.Contact.Id<=0?"hidden":"")">
+        @Html.LabelFor(model => model.Contact.IsUpdateLoginEmail, htmlAttributes: new { @class = "control-label-q" })
+        @Html.ValidationMessageFor(model => model.Contact.IsUpdateLoginEmail, "", new { @class = "text-danger" })
+
+        @Html.EditorFor(model => model.Contact.IsUpdateLoginEmail, new { htmlAttributes = new { @class = "checkBoxField IsUpdateLoginEmail", @data_fieldName = "IsUpdateLoginEmail" } })
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+
+
+        @if (Model.Contact.Id > 0)
+        {
+            @Html.LabelFor(model => model.Contact.Password, htmlAttributes: new { @class = "control-label" })
+            @Html.ValidationMessageFor(model => model.Contact.Password, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Contact.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.Password), @AutoComplete = "new-password" } })
+        }
+        else
+        {
+            @Html.LabelFor(model => model.Contact.Password, htmlAttributes: new { @class = "control-label required-field" })
+            @Html.ValidationMessageFor(model => model.Contact.Password, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Contact.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.Password), data_val_required = IIKI.BaseApp.Localization.Resources.AccountViewLabels.PasswordRequired, @AutoComplete = "new-password" } })
+        }
+
+
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12)
+    {
+        @Html.Raw("</div><div class=\"row form-group\">")
+    }
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @if (Model.Contact.Id > 0)
+        {
+            @Html.LabelFor(model => model.Contact.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+        }
+        else
+        {
+            @Html.LabelFor(model => model.Contact.ConfirmPassword, htmlAttributes: new { @class = "control-label required-field" })
+        }
+        @Html.ValidationMessageFor(model => model.Contact.ConfirmPassword, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.ConfirmPassword), @AutoComplete = "confirm-password" } })
+    </div>
+</div>
+@*}
+    else
+    {
+        //if(string.IsNullOrEmpty(Model.Contact.Password))
+        Model.Contact.Password = "123456";
+        Model.Contact.ConfirmPassword = "123456";
+        @Html.HiddenFor(model => model.Contact.Password)
+        @Html.HiddenFor(model => model.Contact.ConfirmPassword,"44")
+        <div class="row form-group">
+            <div class="col-12">
+                @Html.LabelFor(model => model.Contact.LoginEmail, htmlAttributes: new { @class = "control-label required-field" })
+                @Html.ValidationMessageFor(model => model.Contact.LoginEmail, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Contact.LoginEmail, new { htmlAttributes = new { @class = "form-control", @Readonly = "readonly", @placeholder = @Html.DisplayNameFor(model => model.Contact.LoginEmail) } })
+            </div>
+        </div>
+
+    }*@

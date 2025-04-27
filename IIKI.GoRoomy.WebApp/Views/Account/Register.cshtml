@@ -1,0 +1,207 @@
+﻿@model IIKI.BaseApp.Business.Objects.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout_Blank.cshtml";
+}
+
+<div class="registerPage">
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-12">
+            <div class="text-center mt-3">
+                <a href="/Home">
+                    <img src="~/Images/logo-black.png" />
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-header text-white bg-dark mb-3">
+                    <h5 class="card-title">Register New User</h5>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(m => m.FirstName, new { @class = "required-field control-label" })
+                                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(m => m.LastName, new { @class = "required-field control-label" })
+                                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.Email, new { @class = "required-field control-label" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="">
+                                                @Html.LabelFor(m => m.Password, new { @class = "required-field control-label" })
+                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="">
+                                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "required-field control-label" })
+                                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="">
+                                                <label>Rules for Password</label>
+                                                <ul id="Min6" class="crossList">
+                                                    <li>Minimum 6 characters</li>
+                                                </ul>
+                                                <ul id="Cap1" class="crossList">
+                                                    <li>At least One Capital Letter</li>
+                                                </ul>
+                                                <ul id="Small1" class="crossList">
+                                                    <li>At least One Small Letter</li>
+                                                </ul>
+                                                <ul id="Special1" class="crossList">
+                                                    <li>At least One Special Character</li>
+                                                </ul>
+                                                <ul id="Digit1" class="crossList">
+                                                    <li>At least One Digit</li>
+                                                </ul>
+                                                <ul id="PasswordMatch" class="crossList">
+                                                    <li>Password and Confirm Password should match</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.RoleName, new { @class = "required-field control-label" })
+                                @Html.ValidationMessageFor(m => m.RoleName, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12 text-center">
+                                <input type="submit" value="Register" class="btn btn-dark" />
+                            </div>
+                        </div>
+
+
+                    }
+
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="@Url.Action("Login")" class="btn btn-default float-left ">Back to Login</a>
+                            <a href="/Home" class="btn btn-default float-right">Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryValidation")
+    <script>
+        $(document).ready(function () {
+
+            $("#Password").on("keyup", function () {
+                var currentString = $(this).val().trim();
+                if (currentString.length >= 6) {
+                    CheckList("Min6");
+                }
+                else {
+                    CrossList("Min6");
+                }
+
+                if (currentString.match("[A-Z]")) {
+                    CheckList("Cap1");
+                }
+                else {
+                    CrossList("Cap1");
+                }
+
+                if (currentString.match("[a-z]")) {
+                    CheckList("Small1");
+                }
+                else {
+                    CrossList("Small1");
+                }
+
+                if (/^[a-zA-Z0-9- ]*$/.test(currentString) == false) {
+                    CheckList("Special1");
+                }
+                else {
+                    CrossList("Special1");
+                }
+
+                if (currentString.match("[0-9]")) {
+                    CheckList("Digit1");
+                }
+                else {
+                    CrossList("Digit1");
+                }
+
+                MatchFields("Password", "ConfirmPassword", "PasswordMatch");
+            });
+
+            $("#ConfirmPassword").on("keyup", function () {
+                MatchFields("Password", "ConfirmPassword", "PasswordMatch");
+            });
+
+            function MatchFields(FirstField, SecondField, ListItem) {
+                if ($("#" + FirstField).val() == $("#" + SecondField).val() && $("#" + SecondField).val().length > 0) {
+                    CheckList(ListItem);
+                }
+                else {
+                    CrossList(ListItem);
+                }
+            }
+
+            function CheckList(id) {
+                if ($("#" + id).hasClass("crossList")) {
+                    $("#" + id).removeClass("crossList");
+                }
+                if (!$("#" + id).hasClass("checkList")) {
+                    $("#" + id).addClass("checkList");
+                }
+            }
+
+            function CrossList(id) {
+                if (!$("#" + id).hasClass("crossList")) {
+                    $("#" + id).addClass("crossList");
+                }
+                if ($("#" + id).hasClass("checkList")) {
+                    $("#" + id).removeClass("checkList");
+                }
+            }
+
+        })
+
+    </script>
+
+}

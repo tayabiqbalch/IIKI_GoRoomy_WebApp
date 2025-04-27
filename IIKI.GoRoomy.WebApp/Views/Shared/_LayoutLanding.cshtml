@@ -1,0 +1,97 @@
+﻿@{string selectedLanguage = "en"; HttpCookie cookie = HttpContext.Current.Request.Cookies["IIKI_SelectedLanguage"]; if (cookie != null && cookie.Value != null) { selectedLanguage = cookie.Value; }}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>BaseApp - @ViewBag.Title</title>
+
+    @Styles.Render("~/Content/fontAwsomeAll")
+    @Styles.Render("~/bundles/animate/css")
+    @if (selectedLanguage.Equals("ur"))
+    {
+        @Styles.Render("~/Content/bootstrapRTL")
+    }
+    else
+    {
+        @Styles.Render("~/Content/bootstrap")
+    }
+    @Styles.Render("~/Content/bootstrapDatePicker")
+    @Styles.Render("~/Content/sweetAlert")
+    @Styles.Render("~/Content/DataTables")
+    @Styles.Render("~/Content/select2")
+    @Styles.Render("~/Content/iTheme/css")
+
+    <!--For editable datatable-->
+    @*@Scripts.Render("~/Content/DataTables/buttons")
+        @Scripts.Render("~/Content/DataTables/Select")*@
+    @Styles.Render("~/Content/css")
+    <!-- Add local styles, mostly for plugins css file -->
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+
+</head>
+
+<body dir="@(selectedLanguage.Equals("ur")?"rtl":"ltr")" class="@(selectedLanguage.Equals("ur")?"dir-rtl":"dir-ltr")">
+    <div class="fullbody">
+        <div class="mainMenu navbar navbar-expand-lg fixed-top navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="@Url.Action("Index","Home", new { area = "" })">
+                    <span class="text-primary">
+                        <img src="~/Images/logo-black.png" height="40" alt="IIKI" />
+                    </span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapaseContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapaseContent">
+
+                    <ul class="navbar-nav me-auto mt-lg-0">
+                        <li class="nav-item">@Html.ActionLink(IIKI.BaseApp.Localization.Resources.NavigationLabels.Dashboard, "Index", "Dashboard", new { area = "" }, new { @class = "nav-link" })</li>
+
+                        <li class="nav-item">@Html.ActionLink(IIKI.BaseApp.Localization.Resources.NavigationLabels.ChangeLanguage, "Index", "Language", new { area = "BaseAppArea" }, new { @class = "nav-link" })</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_CommonHiddenFields")
+        <main role="main">
+            <div class="wrapper container-fluid">
+                @RenderBody()
+                @Html.Partial("_CommonStickyPopupLoader")
+                <!--Add/Edit Modal Popup load Partial view-->
+                <div id="iAddEditModal"></div>
+                <!--End Add/Edit Modal Popup load Partial view-->
+
+            </div>
+            <!-- Footer-->
+            @Html.Partial("_Footer")
+        </main>
+    </div>
+    <div class="scripts">
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/popup/js")
+        @Scripts.Render("~/bundles/momentJS")
+        @Scripts.Render("~/bundles/select2")
+        @Scripts.Render("~/bundles/bootstrapDatePicker")
+        @Scripts.Render("~/bundles/DataTables")
+        @Scripts.Render("~/bundles/bootstrapCheckbox")
+        @Scripts.Render("~/bundles/sweetAlert")
+        @Scripts.Render("~/bundles/jqueryValidation")
+        @Scripts.Render("~/bundles/iTheme/js")
+        @Scripts.Render("~/bundles/iTheme/customFunctionsJS")
+        <!--For editable datatable-->
+        @*@Scripts.Render("~/bundles/DataTables/buttons")
+            @Scripts.Render("~/bundles/DataTables/Select")
+            @Scripts.Render("~/bundles/DataTables/altEditor")*@
+
+        @RenderSection("scripts", required: false)
+    </div>
+
+</body>
+</html>

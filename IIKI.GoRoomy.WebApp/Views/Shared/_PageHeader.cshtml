@@ -1,0 +1,66 @@
+﻿@model IIKI.BaseApp.Business.Objects.ViewModel.PageHeaderViewModel
+@using IIKI.BaseApp.Utils;
+@using IIKI.BaseApp.Localization.Resources;
+@using System.Collections.Generic;
+@using System.Collections;
+@using System.Reflection;
+@using IIKI.BaseApp.Business.Objects;
+
+<div class="card ipage-header  transition animated fadeIn  ">
+    
+    <div class="card-body">
+        <a class="expand-collapse-header-action" href=""><div class="expand-collapse-header"><i class="fa fa-arrow-up"></i></div></a>
+        @if (Model.tabs.Any())
+        {
+            <div class="mb-3">
+                <ul class="nav nav-tabs">
+                    @foreach (var tab in Model.tabs)
+                    {
+                        var isActive = tab.IsActive ? "active" : ""; // Determine if this tab is active
+                        <li class="nav-item">
+                            <a class="nav-link @isActive" aria-current="page" href="@tab.TabLink">@tab.TabTitle</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        <h2>@Model.PageTitle</h2>
+        <small>@Model.PageSubTitle</small>
+        @if (Model.breadCrumbs.Count > 0)
+        {
+            <div class="float-right">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        @foreach (var item in Model.breadCrumbs)
+                        {
+                            // Determine route values, create a new dictionary if necessary
+                            RouteValueDictionary routeValues = item.IsLink
+                                ? (item.RouteValues as RouteValueDictionary) ?? new RouteValueDictionary()
+                                : null;
+
+                            if (routeValues != null && item.IsLink)
+                            {
+                                // Ensure 'area' is included in the route values
+                                routeValues["area"] = item.Area;
+
+                                <li class="breadcrumb-item">
+                                    <a href="@Url.Action(item.Action, item.Controller, routeValues)">
+                                        @item.MenuTitle
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                // Non-link breadcrumb item
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @item.MenuTitle
+                                </li>
+                            }
+                        }
+                    </ol>
+                </nav>
+
+            </div>
+        }
+    </div>
+</div>

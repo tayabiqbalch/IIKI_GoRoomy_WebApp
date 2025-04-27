@@ -1,0 +1,24 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@{
+    var obj = new IIKI.BaseApp.Common.CommonObjects.AlertMessageModel();
+    if (TempData["AlertMessage"] != null)
+    {
+        obj = (IIKI.BaseApp.Common.CommonObjects.AlertMessageModel)TempData["AlertMessage"];
+    }
+    if (obj.IsDisplay && obj.IsAutoClose)
+    {
+
+        <div class="alertAutoDismiss alert alert-@(obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.SUCCESS?"success":obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.DANGER?"danger":obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.WARNING?"warning":obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.PRIMARY?"primary":obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.INFO?"info":obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.SECONDARY?"secondary":obj.AlertType==IIKI.BaseApp.Common.CommonStatus.AlertType.LIGHT?"light":"dark") alert-dismissible fade show" role="alert">
+            <strong>@obj.AlertTitle!</strong> @obj.AlertMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    else if (obj.IsDisplay && !obj.IsAutoClose)
+    {
+        <div class="alert alert-@(obj.AlertType==1?"success":obj.AlertType==2?"danger":obj.AlertType==3?"warning":obj.AlertType==4?"primary":obj.AlertType==5?"info":obj.AlertType==6?"secondary":obj.AlertType==7?"light":"dark") alert-dismissible fade show" role="alert">
+            <strong>@obj.AlertTitle!</strong> @obj.AlertMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    }
+}

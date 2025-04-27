@@ -1,0 +1,290 @@
+﻿@model dynamic
+@using IIKI.BaseApp.Utils;
+@using IIKI.BaseApp.Localization.Resources;
+@using System.Reflection;
+@{
+    Type type = Model.GetType();
+    var props = type.GetProperties().Where(p => p.GetCustomAttributes(typeof(BaseFieldAttribute), true).Where(ca => ((BaseFieldAttribute)ca).IsSearchableField == true).Any());
+
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+    var actionName = "Search";
+    if (ViewData["ActionName"] != null)
+    {
+        actionName = ViewData["ActionName"].ToString();
+    }
+    int counter = 1;
+    int layoutColCount = 2;
+}
+@using (Html.BeginForm(actionName, currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data", @class = "tab-validation", @id = "SearchForm" }))
+{
+    if (props.Any())
+    {
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Search</span>
+                    <a class="collapse-icon collapsed" data-bs-toggle="collapse" data-bs-target="#searchCard" aria-expanded="false"></a>
+                </div>
+                <div id="searchCard" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            @{
+                                foreach (var p in props)
+                                {
+                                    BaseFieldAttribute attr = (BaseFieldAttribute)p.GetCustomAttribute(typeof(BaseFieldAttribute), true); ;
+
+                                    if (attr != null)
+                                    {
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.Textbox)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.TextBox(p.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(p.Name) })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxNumber)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.TextBox(p.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(p.Name), @Type = "number" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDecimal)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.TextBox(p.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(p.Name), @Type = "number", @Step = "Any" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxCurrency)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text"><i class="fa fa-money"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxCurrency)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text"><i class="fa fa-money"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxPercentage)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text"><i class="fa fa-percent"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDate)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group date datepicker" id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-target-input="nearest">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append" data-bs-target="#@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDateTime)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group date datetimepicker" id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-target-input="nearest">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append" data-bs-target="#@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDateTime2)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group date datetimepicker" id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-target-input="nearest">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append" data-bs-target="#@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxDateTimeOffset)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group date datetimepicker" id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-target-input="nearest">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append" data-bs-target="#@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextboxTime)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="input-group date time" id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-target-input="nearest">
+                                                @Html.TextBox(p.Name, null, new { @class = "form-control datetimepicker-input", @data_target = "#" + IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name) + "DatePicker", @placeholder = @Html.DisplayName(p.Name) })
+                                                <div class="input-group-append" data-bs-target="#@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)DatePicker" data-bs-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.Textarea)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.TextArea(p.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(p.Name), @Type = "number", @Step = "Any" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.TextareaHTMLEditor)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.TextArea(p.Name, null, new { @class = "form-control", @placeholder = @Html.DisplayName(p.Name), @Type = "number", @Step = "Any" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.Checkbox)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + " mt-4\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.CheckBox(p.Name, new { @class = "checkbox" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.CheckboxOnOffButton)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + " mt-4\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.CheckBox(p.Name, new { @class = "checkBoxField" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.Radiobutton)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + " mt-4\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.RadioButton(p.Name, new { @class = "radiobutton" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.Dropdown && TempData[p.Name + "List"] != null)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.DropDownList(p.Name, new SelectList(TempData[p.Name + "List"] as List<IIKI.BaseApp.Common.CommonObjects.DropDownSelectItem>, "Value", "Text"), new { @class = "form-control" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.DropdownSearchable && TempData[p.Name + "List"] != null)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.DropDownList(p.Name, new SelectList(TempData[p.Name + "List"] as List<IIKI.BaseApp.Common.CommonObjects.DropDownSelectItem>, "Value", "Text"), new { @class = "form-control" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.InputMultiselect && TempData[p.Name + "List"] != null)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            @Html.DropDownList(p.Name, new SelectList(TempData[p.Name + "List"] as List<IIKI.BaseApp.Common.CommonObjects.DropDownSelectItem>, "Value", "Text"), new { @class = "form-control" })
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+                                        else if (attr.RenderMode == IIKI.BaseApp.Common.InputRenderModes.FileUpload)
+                                        {
+                                            @Html.Raw("<div class=\"col-md-" + (12 / layoutColCount) + "\">")
+                                            @Html.Label(p.Name, new { @class = "control-label"})
+                                            @Html.ValidationMessage(p.Name, "", new { @class = "text-danger" })
+                                            <div class="text-center">
+                                                <img id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)Preview" src="@Convert.ToString(TempData["UploadedFilePath"])" onerror="if (this.src != '/Images/Your-Logo.png') this.src = '/Images/Your-Logo.png';" style="max-height:250px;max-width:250px;" />
+                                            </div>
+                                            <div class="text-center">
+                                                <div class="fileUpload btn btn-primary">
+                                                    <i class="fa fa-upload"></i> Upload Logo
+                                                    <input id="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)" type="file" name="@IIKI.BaseApp.Common.CommonFunctions.RemoveSpecialCharacters(p.Name)Upload" class="upload">
+                                                </div>
+                                            </div>
+                                            @Html.Raw("</div>")
+                                            @*if (counter > 0) { counter++; if (counter % layoutColCount == 0) { @Html.Raw("</div><div class=\"row form-group\">") } }*@
+                                        }
+
+                                        if (counter > 0 && counter % layoutColCount == 0)
+                                        {
+                                            @Html.Raw("</div><div class=\"row form-group\">")
+                                        }
+                                        counter++;
+                                    }
+                                }
+                            }
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <div class="float-right">
+                                    <button type="button" id="btnSearch" value="@ButtonsAndLinks.Search" class="btn btn-primary btn-sm btnSearch"><i class="fas fa-search"></i> @ButtonsAndLinks.Search</button>
+                                    <button type="button" id="btnClearSearch" value="@ButtonsAndLinks.Clear" class="btn btn-secondary btn-sm btnClearSearch"><i class="fas fa-times"></i> @ButtonsAndLinks.Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

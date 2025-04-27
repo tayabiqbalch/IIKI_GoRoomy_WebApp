@@ -1,0 +1,41 @@
+﻿@model dynamic
+@using IIKI.BaseApp.Utils;
+@using System.Reflection;
+@using IIKI.BaseApp.Business.Objects;
+@{
+    IEnumerable<PropertyInfo> props = IIKI.GoRoomy.WebApp.Utility.PropertyHelper.GetOrderedTableProperties(Model);
+
+}
+@if (props != null && props.Any())
+{
+    foreach (var p in props)
+    {
+        if (p.Name.Equals("RecordStatus"))
+        {
+            // Retrieve the property value using reflection
+            var propertyValue = p.GetValue(Model, null);
+            if (propertyValue != null)
+            {
+                @Html.Raw("<td>")
+                @Html.Partial("_RecordStatusPartial", new RecordStatusPartialViewModel() { Id = 0, RecordStatus = propertyValue })
+
+                @Html.Raw("</td>")
+            }
+            else
+            {
+                @Html.Raw("<td>")
+                @Html.Raw("-------------")
+                @Html.Raw("</td>")
+
+            }
+        }
+        else
+        {
+            @Html.Raw("<td>")
+            @Html.Display(p.Name)
+            @Html.Raw("</td>")
+        }
+    }
+
+}
+

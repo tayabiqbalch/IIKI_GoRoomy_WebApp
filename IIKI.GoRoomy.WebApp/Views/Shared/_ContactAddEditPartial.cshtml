@@ -1,0 +1,164 @@
+﻿
+@using IIKI.BaseApp.Business.Objects;
+@using System.Security.Claims;
+@using IIKI.GoRoomy.WebApp.Utility;
+@using IIKI.BaseApp.Localization.Resources;
+@using Microsoft.AspNet.Identity
+@model ContactViewModel
+@{
+    var UserIdentity = (ClaimsIdentity)Context.User.Identity;
+    var CurrentUser = UserIdentity.GetUserInfo();
+    string ContactImagePath = string.Empty;
+    if (Model != null && !string.IsNullOrEmpty(Model.Contact.ContactImage))
+    {
+        ContactImagePath = CurrentUser.UserResourcesPath + Model.Contact.ContactImage;
+    }
+}
+
+@Html.HiddenFor(model => model.Contact.Id)
+@Html.HiddenFor(model => model.Contact.ContactTypeId)
+@Html.HiddenFor(model => model.Contact.ContactImage)
+@Html.HiddenFor(model => model.Contact.SubCasteId, new { @Id = "Contact_SelectedSubCasteId", @Name = "Contact.SelectedSubCasteId" })
+<div class="row form-group">
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.FirstName, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.FirstName, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.FirstName) } })
+
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.LastName, htmlAttributes: new { @class = "control-label" })
+        @Html.ValidationMessageFor(model => model.Contact.LastName, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.LastName, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.LastName) } })
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.FirstNameUrdu, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.FirstNameUrdu, "", new { @class = "text-danger" })
+        <div class="keyboard-wrapperRTL">
+            @Html.EditorFor(model => model.Contact.FirstNameUrdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir = "rtl", @placeholder = @Html.DisplayNameFor(model => model.Contact.FirstNameUrdu) } })
+        </div>
+
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 4)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.LastNameUrdu, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.LastNameUrdu, "", new { @class = "text-danger" })
+        <div class="keyboard-wrapperRTL">
+            @Html.EditorFor(model => model.Contact.LastNameUrdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir = "rtl", @placeholder = @Html.DisplayNameFor(model => model.Contact.LastNameUrdu) } })
+        </div>
+    </div>
+
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6 || Model.Contact.BootstrapUIColVal == 3)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.NationalIdNumber, htmlAttributes: new { @class = "control-label" })
+
+        @Html.ValidationMessageFor(model => model.Contact.NationalIdNumber, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.NationalIdNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.NationalIdNumber) } })
+
+    </div>
+
+    @if (Model.Contact.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.CellNumber, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.CellNumber, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.CellNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.CellNumber) } })
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6 || Model.Contact.BootstrapUIColVal == 4 || Model.Contact.BootstrapUIColVal == 2)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.EmailAddress, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.EmailAddress, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.EmailAddress, new { htmlAttributes = new { @class = "form-control", @placeholder = @Html.DisplayNameFor(model => model.Contact.EmailAddress) } })
+
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.BirthDate, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.BirthDate, "", new { @class = "text-danger" })
+        <div class="input-group date datepicker" id="BirthDatePicker" data-target-input="nearest">
+            @Html.EditorFor(model => model.Contact.BirthDate, new { htmlAttributes = new { @class = "form-control datetimepicker-input", @data_target = "#BirthDatePicker", @placeholder = @Html.DisplayNameFor(model => model.Contact.BirthDate) } })
+            <div class="input-group-append" data-bs-target="#BirthDatePicker" data-bs-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6 || Model.Contact.BootstrapUIColVal == 3)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.CasteId, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.CasteId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Contact.CasteId, new SelectList(Model.Castes, "Value", "Text"), "--SELECT--", new { @class = "form-control" })
+    </div>
+
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 4)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.SubCasteId, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.SubCasteId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Contact.SubCasteId, new SelectList(Model.SubCastes, "Value", "Text"), "--SELECT--", new { @class = "form-control" })
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.Gender, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.Gender, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Contact.Gender, new SelectList(Model.Genders, "Value", "Text"), "--SELECT--", new { @class = "form-control" })
+
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+
+        @Html.LabelExtentedFor(model => model.Contact.MaritalStatus, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.MaritalStatus, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Contact.MaritalStatus, new SelectList(Model.MaritalStatuses, "Value", "Text"), "--SELECT--", new { @class = "form-control" })
+
+    </div>
+
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6 || Model.Contact.BootstrapUIColVal == 4 || Model.Contact.BootstrapUIColVal == 3 || Model.Contact.BootstrapUIColVal == 2)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal">
+        @Html.LabelExtentedFor(model => model.Contact.DivisionId, htmlAttributes: new { @class = "control-label " })
+        @Html.ValidationMessageFor(model => model.Contact.DivisionId, "", new { @class = "text-danger" })
+        @Html.DropDownListFor(model => model.Contact.DivisionId, new SelectList(Model.Divisions, "Value", "Text"), "--SELECT--", new { @class = "form-control" })
+    </div>
+    @if (Model.Contact.BootstrapUIColVal == 12)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal mt-2rem">
+
+        @Html.LabelExtentedFor(model => model.Contact.EmailPromotion, htmlAttributes: new { @class = "control-label-q" })
+        @Html.ValidationMessageFor(model => model.Contact.EmailPromotion, "", new { @class = "text-danger" })
+        @Html.EditorFor(model => model.Contact.EmailPromotion, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "EmailPromotion" } })
+
+    </div>
+
+    @if (Model.Contact.BootstrapUIColVal == 12 || Model.Contact.BootstrapUIColVal == 6)
+    {@Html.Raw("</div><div class=\"row form-group\">")}
+    <div class="col-md-@Model.Contact.BootstrapUIColVal @(Model.Contact.BootstrapUIColVal==4 || Model.Contact.BootstrapUIColVal == 3? "mt-2":"")">
+        @Html.LabelExtentedFor(model => model.Contact.ContactImage, htmlAttributes: new { @class = "control-label" })
+
+        <div class="d-inline">
+            <div class="fileUpload btn btn-primary">
+                <i class="fa fa-upload"></i> Picture
+                <input id="ContactImageUpload" type="file" name="ContactImageUpload" class="upload profileImageUpload" data-PreviewImageId="ContactImagePreview" accept="image/gif,image/jpeg,image/png,.gif,.jpeg,.jpg,.png,.svg">
+            </div>
+        </div>
+        <div class="d-inline">
+            <img id="ContactImagePreview" src="@(ContactImagePath)" onerror="if (this.src != '/Images/profile.png') this.src = '/Images/profile.png';" style="height:50px;width:50px;border-radius:50%;" />
+        </div>
+        @*<div class="fileUpload btn btn-primary">
+                <i class="fa fa-upload"></i> Picture
+                <input id="ContactImageUpload" type="file" name="ContactImageUpload" class="upload profileImageUpload" data-PreviewImageId="ContactImagePreview" accept="image/gif,image/jpeg,image/png,.gif,.jpeg,.jpg,.png,.svg">
+            </div>*@
+    </div>
+
+</div>

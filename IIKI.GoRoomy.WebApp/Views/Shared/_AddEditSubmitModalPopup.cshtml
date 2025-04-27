@@ -1,0 +1,15 @@
+﻿@using IIKI.BaseApp.Localization.Resources;
+@using IIKI.BaseApp.Business.Objects;
+@model AddEditModalPopupViewModel
+
+<!-- Modal -->
+<div class="modal imodal fade" id="AddEditModal" tabindex="-1" role="dialog" aria-labelledby="AddEditModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+
+            @*<div class="modal-footer">
+            @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = 0, IsModalPopup = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", GetModalURL = Url.Action("_AddEditModal", new { Id = 0 }), SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit, IsDisplaySaveButton = true, IsDisplayModalCancelButton = true, IsReload = true })
+        </div>*@
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+﻿@using IIKI.BaseApp.Business.Objects
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = "~/Views/Shared/_Layout_Blank.cshtml";
+}
+<div class="loginPage">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Index","Dashboard")">
+                    <img src="~/Images/logo.png" />
+                </a>
+            </div>
+            <div class="card">
+                <div class="card-header shadow-lg text-white bg-secondary">
+                    <h5 class="card-title">@IIKI.BaseApp.Localization.Resources.NavigationLabels.Login</h5>
+                </div>
+                <div class="card-body shadow-lg">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.HiddenFor(m => m.SystemTimeZoneId)
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.Email, new { @class = "required-field control-label" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                @Html.LabelFor(m => m.Password, new { @class = "required-field control-label" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                <div class="input-group">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                    <div class="input-group-append icon-append btnViewPassword">
+                                        <span class="input-group-text fa fa-eye"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <div class="checkbox">
+                                    @Html.CheckBoxFor(m => m.RememberMe)
+                                    @Html.LabelFor(m => m.RememberMe)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <input type="submit" value="@IIKI.BaseApp.Localization.Resources.ButtonsAndLinks.Login" class="btn btn-dark btnFormSubmit" />
+                            </div>
+                        </div>
+
+
+                    }
+
+                </div>
+                <div class="card-footer shadow-lg">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="@Url.Action("Register")" class="btn btn-default float-left ">@IIKI.BaseApp.Localization.Resources.ButtonsAndLinks.RegisterNewUser</a>
+                            <a href="@Url.Action("ForgotPassword")" class="btn btn-default float-right">@IIKI.BaseApp.Localization.Resources.ButtonsAndLinks.ForgotPassword</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryValidation")
+    <script>
+        $(document).ready(function () {
+            var timeZoneDetails = CommonFunctions.getTimeZoneDetails();
+            $('#SystemTimeZoneId').val(JSON.stringify(timeZoneDetails));
+            $(document).on("click", ".btnViewPassword", function () {
+                $(this).children().toggleClass('fa-eye fa-eye-slash');
+                let input = $("#Password");
+                input.attr('type', input.attr('type') === 'password' ? 'text' : 'password');
+            });
+        });
+    </script>
+}

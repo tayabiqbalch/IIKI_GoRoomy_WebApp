@@ -1,0 +1,95 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@using IIKI.BaseApp.Localization.Resources;
+@using IIKI;
+@model IEnumerable<IIKI.GoRoomy.Business.Objects.HotelRoom>
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //ViewBag.Title = "Hotel Rooms";
+    string pageTitle = ViewBag.Title;
+    string menuName = "Hotel Rooms";
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+    long hotelId = ViewBag.DefaultHotelId;
+
+    /*Page Header*/
+    var extraBreadcrumbs = new List<IIKI.BaseApp.Business.Objects.ViewModel.PageBreadCrumb>
+    {
+        new IIKI.BaseApp.Business.Objects.ViewModel.PageBreadCrumb { IsLink=true, MenuTitle = "Hotel Details", Controller = "Hotels", Action="AddEdit", RouteValues = new { Id = hotelId.EncryptQueryString()}},
+
+    };
+    var pageHeaderViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetPageHeader(0
+, pageTitle
+, (int)IIKI.GoRoomy.Common.Navigations.Hotels);
+    if (hotelId > 0)
+    {
+        pageHeaderViewModel.tabs = new List<IIKI.BaseApp.Business.Objects.TabsViewModel>
+{
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Details", TabLink = Url.Action("AddEdit","Hotels", new { Id = hotelId }), IsActive = false },
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Addresses", TabLink = Url.Action("Index","EntityAddresses", new { EntityTypeId = ((int)IIKI.GoRoomy.Common.EntityTypes.Hotels).EncryptQueryString(),EntityId = hotelId.EncryptQueryString() }), IsActive = false },
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Rooms", TabLink = Url.Action("Index","HotelRooms", new { MotelId = hotelId.EncryptQueryString() }), IsActive = true },
+
+        };
+    }
+    Html.RenderPartial("_PageHeader", pageHeaderViewModel);
+    /*End Page Header*/
+
+    /*Page Content*/
+
+    /*generate buttons model which is used to display buttons on top of grid*/
+    var buttonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing)
+    {
+        Id = 0,
+        IsModalPopup = true,
+        IsGetModal = true,
+        ModalPopupId = "AddEditModal",
+        ModalFormId = "AddEditForm",
+        AddEditURL = Url.Action("AddEdit", new { Id = 0, MotelId = hotelId.EncryptQueryString() }),
+        GetModalURL = Url.Action("_AddEditModal", new { Id = 0, HotelId = hotelId.EncryptQueryString() }),
+        IsDisplayCreateButton = true,
+        IsDisplayCreateModalButton = true
+    };
+    /*generate buttons model which is used to display buttons in grid rows*/
+    /*URLs for edit etc be like defined below: Url.Action("AddEdit", new { Id = "{0}" })*/
+
+    List<LinkButtons> linkButtons = new List<LinkButtons>();
+    linkButtons.Add(new LinkButtons() { ButtonURL = Url.Action("", ""), ButtonText = "Test", ButtonIcon = "<i class=\"fa fa-home\"></i>", BootstrapButtonColor = (int)IIKI.BaseApp.Common.BootstrapColors.Secondary });
+    var gridButtonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing)
+    {
+        Id = 0,
+        IsModalPopup = true,
+        IsGetModal = true,
+        ModalPopupId = "AddEditModal",
+        ModalFormId = "AddEditForm",
+        AddEditURL = Url.Action("AddEdit", new { Id = "{0}", MotelId = hotelId.EncryptQueryString() }),
+        GetModalURL = Url.Action("_AddEditModal", new { Id = "{0}", HotelId = hotelId.EncryptQueryString() }),
+        IsDisplayCreateButton = false,
+        IsDisplayCreateModalButton = false,
+        IsDisplayEditButton = true,
+        IsDisplayModalEditButton = true,
+        IsDisplayRemoveButton = true,
+        IsDisplayDeleteButton = true,
+        LinkButtons = linkButtons
+    };
+    /*generate page content model*/
+    var deleteFormSubmitURL = Url.Action("DeleteRecord");
+    var removeFormSubmitURL = Url.Action("MarkAsDeleteRecord");
+    var pageContentViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetListingPageContentModel(Model, buttonsViewModel, gridButtonsViewModel, drawDeleteForm: true, deleteFormSubmitURL: deleteFormSubmitURL, drawRemoveForm: true, removeFormSubmitURL: removeFormSubmitURL);
+
+    /*Set Search Datatable URL*/
+    pageContentViewModel.SearchDataTableURL = Url.Action("SearchDataTableRecords");
+
+    <!--Page Content Partial View-->
+    Html.RenderPartial("_PageContent", pageContentViewModel);
+    /*End Page Content*/
+
+}
+@section scripts {
+    <script>
+
+        $(document).ready(function () {
+                SetJqueryDatatable('@pageContentViewModel.GridViewModel.GridHTMLId');
+        });
+
+    </script>
+}

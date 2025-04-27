@@ -1,0 +1,106 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@model IEnumerable<Caste>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = IIKI.BaseApp.Localization.Resources.CasteLabels.Title;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+
+
+<!--Page Header-->
+@{
+    IIKI.BaseApp.Business.Objects.ViewModel.PageHeaderViewModel pageHeader = new IIKI.BaseApp.Business.Objects.ViewModel.PageHeaderViewModel();
+    pageHeader.PageTitle = ViewBag.Title;
+    pageHeader.PageSubTitle =$"List of {pageHeader.PageTitle.ToLower()}";
+    pageHeader.IsAddEditPage = false;
+    pageHeader.breadCrumbs.Add(new IIKI.BaseApp.Business.Objects.ViewModel.PageBreadCrumb() { MenuTitle = "Definitions" });
+    pageHeader.breadCrumbs.Add(new IIKI.BaseApp.Business.Objects.ViewModel.PageBreadCrumb() { MenuTitle = ViewBag.Title, IsActive = true });
+    Html.RenderPartial("_PageHeader", pageHeader);
+}
+
+<!--End Page Header-->
+<div class=" ipage-content">
+    @Html.Partial("_AlertMessage")
+    <div class="ipage-buttons-top  ibuttons">
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" float-right">
+                    @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing) { Id = 0, IsModalPopup = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", AddEditURL = Url.Action("AddEdit", new { Id = 0 }), GetModalURL = Url.Action("_AddEditModal", new { Id = 0 }), IsDisplayCreateButton = true, IsDisplayCreateModalButton = true })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="table-records-responsive">
+                        <table id="RecordsListTable" class="jq-dt-records-table table responsive nowrap table-hover table-sm ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CasteCode)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CasteName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CasteNameUrdu)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ParentCasteName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RecordStatus)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CasteCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CasteName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CasteNameUrdu)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ParentCasteName)
+                                        </td>
+                                        <td>
+                                            @Html.Partial("_RecordStatusPartial", new RecordStatusPartialViewModel() { Id = item.Id, RecordStatus = item.RecordStatus })
+
+                                        </td>
+                                        <td>
+                                            @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing) { Id = item.Id, IsModalPopup = true, IsGetModal = true, ModalPopupId = "AddEditModal", ModalFormId = "AddEditForm", AddEditURL = Url.Action("AddEdit", new { Id = item.Id }), GetModalURL = Url.Action("_AddEditModal", new { Id = item.Id }), IsDisplayModalEditButton = true, IsDisplayEditButton = true, IsDisplayRemoveButton = true })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_DeleteRecordForm", new IIKI.BaseApp.Business.Objects.DeleteRecordFormViewModel() { FormActionName = IIKI.BaseApp.Common.CommonStatus.DeleteFormOptions.RemoveRecordFormActionName })
+
+<input type="hidden" id="SearchDataTableRecordsURL" name="SearchDataTableRecordsURL" value="@Url.Action("SearchDataTableRecords",currentControllerName)" />
+@section Scripts {
+    
+    <script>
+        SetJqueryDatatable('RecordsListTable', [5], [5]);
+    </script>
+}
+

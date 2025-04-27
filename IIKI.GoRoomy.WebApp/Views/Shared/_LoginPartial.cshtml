@@ -1,0 +1,90 @@
+﻿@using IIKI.BaseApp.Business.Methods;
+@using System.Security.Claims;
+@using IIKI.GoRoomy.WebApp.Utility;
+@using Microsoft.AspNet.Identity
+@{
+
+    var UserIdentity = (ClaimsIdentity)Context.User.Identity;
+    var userFullName = UserIdentity.GetUserFullName();
+}
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "form-inline navbar-nav d-flex justify-content-end my-2 my-lg-0" }))
+    {
+        @Html.AntiForgeryToken()
+        //Uncomment if you want to show name with user profile picture.
+        @*<div class="nav-item">
+                <a class="nav-link" href="/Profile/Index"><span class="" title="@(userFullName)">@(userFullName.Length > 10 ? userFullName.Substring(0, 10) + "..." : userFullName)</span></a>
+            </div>*@
+        <div class="dropdown nav-item">
+            <a href="/Profile/Index" class="dropdown-toggle nav-link nav-profile-img" data-bs-toggle="dropdown" title="@(userFullName)">
+                <img src="@UserIdentity.GetProfileImage()" id="imgHeaderProfile" class="img-circle m-b-n profile-img" alt="Profile Picture">
+                <span>@UserIdentity.GetUserName()</span>
+            </a>
+            <div class="dropdown-menu animated fadeInRight">
+
+                <a class="dropdown-item disabled" href="/Profile/Index" title="@(userFullName)">
+                    <i class="fas fa-handshake menu-icon text-primary"></i>
+                    <span>Hi @(userFullName.Length > 20 ? userFullName.Substring(0, 20) + "..." : userFullName)</span>
+                </a>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href="/Profile/Index">
+                    <i class="fas fa-user menu-icon text-primary"></i>
+                    <span>@IIKI.BaseApp.Localization.Resources.NavigationLabels.Profile</span>
+                </a>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href="/Profile/ReviewerRequest">
+                    <i class="fas fa-user menu-icon text-primary"></i>
+                    <span>Become a Reviewer</span>
+                </a>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
+                    <i class="fas fa-sign-out-alt menu-icon text-primary"></i>
+                    <span>@IIKI.BaseApp.Localization.Resources.NavigationLabels.Logoff</span>
+                </a>
+
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    <ul class="navbar-nav navbar-right">
+        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Register","Account",new { area = "" })">@IIKI.BaseApp.Localization.Resources.NavigationLabels.Register </a> </li>
+        <li class="nav-item"> <a class="nav-link" href="@Url.Action("Login","Account",new { area = "" })">@IIKI.BaseApp.Localization.Resources.NavigationLabels.Login </a></li>
+    </ul>
+}
+
+
+
+
+
+@*@if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right form-inline" }))
+        {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li class="nav-item"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+        }
+    }
+    else
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Register","Account")">Register </a> </li>
+            <li class="nav-item"> <a class="nav-link" href="@Url.Action("Login","Account")">Log in </a></li>
+        </ul>
+    }*@

@@ -1,0 +1,66 @@
+﻿@model List<IIKI.BaseApp.Business.Objects.UserNavigation>
+@{
+    string Action = "";
+    string Controller = "";
+    string selectedLanguage = "en";
+    HttpCookie cookie = HttpContext.Current.Request.Cookies["IIKI_SelectedLanguage"];
+    if (cookie != null && cookie.Value != null)
+    {
+        selectedLanguage = cookie.Value;
+    }
+}
+
+<div class="dropdown-menu animated lightSpeedIn">
+    @foreach (var navigation in Model)
+    {
+        if (navigation.IsParent && (navigation.SubMenu == null || navigation.SubMenu.Count <= 0))
+        {
+            continue;
+        }
+        if (navigation.SubMenu != null && navigation.SubMenu.Count > 0)
+        {
+            if (navigation.SubMenu.Where(x => x.Controller == navigation.Controller && x.Action == navigation.Action).ToList().Count > 0)
+            {
+                <div class=" dropdown-submenu dropright">
+                    <a href="@Url.Action(navigation.Action, navigation.Controller)" class="dropdown-toggle dropdown-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                        @Html.Raw(navigation.MenuIcon)
+                        <span class="dropdown-item-title">@(selectedLanguage.Equals("ur") ? navigation.MenuTitleUrdu : navigation.MenuTitle)</span>
+                    </a>
+
+                    @Html.Partial("_NavigationListSmall", navigation.SubMenu)
+                </div>
+                continue;
+            }
+            else
+            {
+                <div class="dropdown-submenu dropright">
+                    <a href="#" class="dropdown-toggle dropdown-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Html.Raw(navigation.MenuIcon)
+                        <span class="dropdown-item-title">@(selectedLanguage.Equals("ur") ? navigation.MenuTitleUrdu : navigation.MenuTitle)</span>
+                    </a>
+                    @Html.Partial("_NavigationListSmall", navigation.SubMenu)
+                </div>
+
+
+
+                continue;
+            }
+        }
+        Action = navigation.Action;
+        Controller = navigation.Controller;
+        if (navigation.Action == null)
+        {
+            Action = "";
+        }
+        if (navigation.Controller == null)
+        {
+            Controller = "";
+        }
+
+<a href="@Url.Action(Action, Controller)" class="dropdown-item">
+    @Html.Raw(navigation.MenuIcon)
+    <span class="dropdown-item-title">@(selectedLanguage.Equals("ur") ? navigation.MenuTitleUrdu : navigation.MenuTitle)</span>
+</a>
+    }
+</div>

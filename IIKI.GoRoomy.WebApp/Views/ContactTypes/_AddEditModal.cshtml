@@ -1,0 +1,75 @@
+﻿
+@using IIKI.BaseApp.Business.Objects
+@model ContactType
+@{
+    string menuName = IIKI.BaseApp.Localization.Resources.ContactTypeLabels.AddEditTitle;
+    ViewBag.Title = ViewBag.Title + " " + menuName;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+}
+
+
+<div class="modal-header">
+    @if (Model.Id > 0)
+    {
+        <span class="modal-title" id="AddEditModalTitle">@ViewBag.Title</span>
+    }
+    else
+    {
+        Model.IsActive = true;
+        <h5 class="modal-title" id="AddEditModalTitle">@ViewBag.Title</h5>
+    }
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    @using (Html.BeginForm("_AddEdit", currentControllerName, new { Area = currentAreaName }, FormMethod.Post, new { role = "form", @class = "", @id = "AddEditForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.ContactTypeName, new { @class = "required-field control-label" })
+                    @Html.ValidationMessageFor(m => m.ContactTypeName, "", new { @class = "text-danger" })
+                    <div class="keyboard-wrapper">
+                        @Html.EditorFor(model => model.ContactTypeName, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "en", @placeholder = @Html.DisplayNameFor(m => m.ContactTypeName) } })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.ContactTypeNameUrdu, new { @class = "required-field control-label" })
+                    @Html.ValidationMessageFor(m => m.ContactTypeNameUrdu, "", new { @class = "text-danger" })
+                    <div class="keyboard-wrapperRTL">
+                        @Html.EditorFor(model => model.ContactTypeNameUrdu, new { htmlAttributes = new { @class = "form-control keyboardInput", @lang = "ur", @dir="rtl", @placeholder = @Html.DisplayNameFor(m => m.ContactTypeNameUrdu) } })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(m => m.ContactTypeDescription, new { @class = "control-label" })
+                    @Html.ValidationMessageFor(m => m.ContactTypeDescription, "", new { @class = "text-danger" })
+                    <div class="keyboard-wrapper">
+                        @Html.TextAreaFor(model => model.ContactTypeDescription, new { @rows = "3", @class = "form-control keyboardInput", @lang = "en", @placeholder = @Html.DisplayNameFor(m => m.ContactTypeDescription) })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label-q" })
+                    @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "checkBoxField", @data_fieldName = "IsActive" } })
+                </div>
+            </div>
+        </div>
+
+
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryValidation")
+
+
+@Scripts.Render("~/bundles/iTheme/customFunctionsJS")
+

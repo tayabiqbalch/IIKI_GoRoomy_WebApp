@@ -1,0 +1,38 @@
+﻿@using System.Globalization;
+@*<ul class="navbar-nav navbar-right">
+        <li class="nav-item"> <a class="nav-link" href="@Url.Action("ChangeLanguage","Language",new { area = "",language="en" })">@IIKI.BaseApp.Localization.Resources.NavigationLabels.English </a> </li>
+        <li class="nav-item"> <a class="nav-link" href="@Url.Action("ChangeLanguage","Language",new { area = "",language="ur" })">@IIKI.BaseApp.Localization.Resources.NavigationLabels.Urdu </a></li>
+    </ul>*@
+@{
+    CultureInfo[] CultureInfoArray = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
+    var CultureInfoList = CultureInfoArray.Where(x => x.IsNeutralCulture == true &&( x.EnglishName=="English" || x.EnglishName=="Urdu" || x.EnglishName=="Hindi" || x.EnglishName=="Arabic" || x.EnglishName=="Persian" || x.EnglishName=="Turkish" || x.EnglishName=="Russian" || x.EnglishName=="Spanish" || x.EnglishName=="French" || x.EnglishName=="Filipino" || x.EnglishName=="Chinese")).ToList();
+    var list = IIKI.BaseApp.Business.Methods.ApplicationSupportedLanguageBAL.GetList(IIKI.BaseApp.Common.CommonStatus.RecordStatus.Active);
+}
+
+<div class="dropdown nav-item">
+    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+        @IIKI.BaseApp.Localization.Resources.NavigationLabels.ChangeLanguage
+    </a>
+    <div class="dropdown-menu animated fadeInRight m-t-xs" style="max-height: 400px;overflow: auto;">
+        @foreach (var item in list)
+        {
+            <a class="dropdown-item" href="@Url.Action("ChangeLanguage","Languages",new { area = "",language=@item.CultureName })">
+                <span>@item.EnglishName (@item.NativeName)</span>
+            </a>
+
+        }
+        @*@foreach (CultureInfo item in CultureInfoList)
+        {
+            <a class="dropdown-item" href="@Url.Action("ChangeLanguage","Language",new { area = "",language=@item.Name })">
+                <span>@item.EnglishName (@item.NativeName)</span>
+            </a>
+
+        }*@
+        @*<a class="dropdown-item" href="@Url.Action("ChangeLanguage","Language",new { area = "",language="en" })">
+                <span>@IIKI.BaseApp.Localization.Resources.NavigationLabels.English</span>
+            </a>
+            <a class="dropdown-item" href="@Url.Action("ChangeLanguage","Language",new { area = "",language="ur" })">
+            <span>@IIKI.BaseApp.Localization.Resources.NavigationLabels.Urdu</span>
+        </a>*@
+    </div>
+</div>

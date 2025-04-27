@@ -1,0 +1,112 @@
+﻿@using IIKI.BaseApp.Business.Objects;
+@using IIKI.BaseApp.Localization.Resources;
+@model IEnumerable<IIKI.GoRoomy.Business.Objects.HotelReservation>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Hotel Reservations";
+    string menuName = "Hotel Reservations";
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+    /*Page Header*/
+    var pageHeaderViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetPageHeader(0, "Hotel Reservations"
+        , (int)IIKI.GoRoomy.Common.Navigations.HotelBookingRequests);
+    Html.RenderPartial("_PageHeader", pageHeaderViewModel);
+    /*End Page Header*/
+
+    /*Page Content*/
+
+    /*generate buttons model which is used to display buttons on top of grid*/
+    var buttonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing)
+    {
+        Id = 0,
+        IsModalPopup = true,
+        IsGetModal = true,
+        ModalPopupId = "AddEditModal",
+        ModalFormId = "AddEditForm",
+        AddEditURL = Url.Action("AddEdit", new { Id = 0 }),
+        GetModalURL = Url.Action("_AddEditModal", new { Id = 0 }),
+        IsDisplayCreateButton = true,
+        IsDisplayCreateModalButton = true
+    };
+    /*generate buttons model which is used to display buttons in grid rows*/
+    /*URLs for edit etc be like defined below: Url.Action("AddEdit", new { Id = "{0}" })*/
+    var gridButtonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.Listing)
+    {
+        Id = 0,
+        IsModalPopup = true,
+        IsGetModal = true,
+        ModalPopupId = "AddEditModal",
+        ModalFormId = "AddEditForm",
+        AddEditURL = Url.Action("AddEdit", new { Id = "{0}" }),
+        GetModalURL = Url.Action("_AddEditModal", new { Id = "{0}" }),
+        IsDisplayCreateButton = false,
+        IsDisplayCreateModalButton = false,
+        IsDisplayEditButton = true,
+        IsDisplayModalEditButton = true,
+        IsDisplayRemoveButton = true,
+        IsDisplayDeleteButton = true
+    };
+    /*generate page content model*/
+    var deleteFormSubmitURL = Url.Action("DeleteRecord");
+    var removeFormSubmitURL = Url.Action("MarkAsDeleteRecord");
+    var pageContentViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetListingPageContentModel(Model, buttonsViewModel, gridButtonsViewModel, drawDeleteForm: true, deleteFormSubmitURL: deleteFormSubmitURL, drawRemoveForm: true, removeFormSubmitURL: removeFormSubmitURL);
+    pageContentViewModel.GridViewModel.RenderSearchForm = true;
+    /*Set data load dynamically*/
+    pageContentViewModel.GridViewModel.DrawGridBody = false;
+    /*Set Search Datatable URL*/
+    pageContentViewModel.SearchDataTableURL = Url.Action("SearchDataTableRecords");
+
+    <!--Page Content Partial View-->
+    Html.RenderPartial("_PageContent", pageContentViewModel);
+    /*End Page Content*/
+
+}
+@section scripts {
+    <script>
+        function getFilterParams() {
+           return {
+                HotelId: $("#HotelId").val(),
+                HotelRoomId: $("#HotelRoomId").val(),
+                //IsJvUser : false,
+                PaymentMethodId: $("#PaymentMethodId").val(),
+                PromotionId: $("#PromotionId").val(),
+                ReservationStatusId: $("#ReservationStatusId").val(),
+                ReservationMadeByStatusId: $("#ReservationMadeByStatusId").val(),
+                //UserId : $("#UserId").val(),
+                SearchString: $("#SearchString").val()
+            };
+        }
+        
+        $(document).ready(function () {
+            @*SetJqueryDatatable('@pageContentViewModel.GridViewModel.GridHTMLId');*@
+            
+            LoadJQeuryDataTable({
+                GridHTMLId: '@pageContentViewModel.GridViewModel.GridHTMLId',
+                SearchDataTableURL: '@pageContentViewModel.SearchDataTableURL',
+                //RequestFilterParams: getFilterParams,// Custom AJAX parameters for the DataTable request
+                controllerName: '@currentControllerName',  // Example controller name
+                actionName: 'AddEdit',      // Example action name
+                areaName: '@currentAreaName',   // Optional area name
+                queryParams: { }, // Additional query params for the action buttons
+                isShowDelete: true,      // Optionally show the delete button
+                isShowRemove: false,      // Optionally show the soft delete(Remove) button
+                processing: true,  // Enable processing indicator
+                serverSide: true,  // Enable server-side processing
+                searching: false,   // Enable searching
+
+            });
+
+
+
+            // Use the common AJAX function to populate the City dropdown
+            $('#HotelId').change(function () {
+                var selectedVal = $(this).val();
+
+                // Use the common AJAX function to populate the City dropdown
+                LoadSubDropDownListAjax('POST', selectedVal, '@Url.Action("GetByHotelJson", "HotelRooms")', 'HotelRoomId', 0, false, true);
+            });
+        });
+
+    </script>
+}

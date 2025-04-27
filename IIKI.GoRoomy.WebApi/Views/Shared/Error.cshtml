@@ -1,0 +1,35 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<div class="row d-flex justify-content-center">
+    <div class="col-md-4">
+        <div class="content-v-center" >
+            <div class="text-center mt-3">
+                <i class="fa fa-exclamation-triangle text-danger" style="font-size:8rem;"></i>
+            </div>
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h4 class="text-danger">ERROR</h4>
+                    <p class="text-danger">An error occurred while processing your request.</p>
+                    <div>
+                        <small>
+                            <strong>Controller: </strong>@(Model.ControllerName) @(Model.ActionName)
+                            <br />
+                            <strong>Message: </strong>@(Model.Exception.Message)<br />
+
+                            @if (Model.Exception.InnerException != null)
+                            {
+                                <strong>More Info: </strong>@(Model.Exception)
+                            }
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

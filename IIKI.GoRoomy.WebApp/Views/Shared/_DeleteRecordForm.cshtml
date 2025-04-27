@@ -1,0 +1,16 @@
+﻿@using IIKI.BaseApp.Localization.Resources;
+@using IIKI.BaseApp.Business.Objects;
+@model DeleteRecordFormViewModel
+
+@*@using (Html.BeginForm(Model.FormSubmitURL, FormMethod.Post, new { role = "form", @class = "needs-validation", @novalidate = "novalidate", @id = $"{Model.FormId}" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="@Model.FormFieldId" id="@Model.FormFieldId" value="" />
+
+}*@
+
+<form action="@Model.FormSubmitURL" method="post" role="form" id="@Model.FormId">
+
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="@Model.FormFieldId" id="@Model.FormFieldId" value="" />
+</form>

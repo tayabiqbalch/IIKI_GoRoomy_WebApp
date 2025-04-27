@@ -1,0 +1,35 @@
+﻿@using IIKI.BaseApp.Business.Methods;
+@using System.Security.Claims;
+@using IIKI.GoRoomy.WebApp.Utility;
+@{
+    var UserIdentity = (ClaimsIdentity)Context.User.Identity;
+    var CurrentUser = UserIdentity.GetUserInfo();
+    string applicationArea = "__ALL__";
+    if (CurrentUser.RoleName!=null && CurrentUser.RoleName.Equals("Customer"))
+    {
+        applicationArea = "Customer";
+    }
+    var SessionMenu = UserIdentity.GetNavigationClaim(applicationArea);
+    var FullName = UsersProfileBAL.GetUserInfo(CurrentUser.UserId).FullName;
+
+}
+<div class="mainMenu navbar navbar-expand-lg fixed-top inavbar-bg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="@Url.Action("Index","Dashboard",new { area=""})">
+            <img src="~/Images/logo.png" class="nav-logo-img" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapaseContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapaseContent">
+            @if (SessionMenu != null)
+            {
+            @Html.Partial("_Navigation", SessionMenu)
+            }
+
+
+            @Html.Partial("_LoginPartial")
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model IIKI.BaseApp.Business.Objects.GridViewModel
+@{
+    object oObject = Model.ModelList.FirstOrDefault();
+    if (oObject == null)
+    {
+        var type = Model.ModelList.GetType().GetGenericArguments()[0]; // Get the type of the list items
+        oObject = Activator.CreateInstance(type);  // Create a new instance of the type dynamically
+    }
+}
+
+@if (Model.RenderSearchForm)
+{
+    <div id="@(Model.GridHTMLId)_GridSearchForm" class="searchFormParams form-horizontal">
+        @Html.Partial("_AddEditForm", oObject, new ViewDataDictionary { { "LayoutColCount", 3 }, { "isSearchForm", true } })
+        <div class="row form-group mb-3 ">
+            <div class="col-md-4">
+                @Html.LabelExtented("SearchString", new { @class = $"control-label" })
+                @Html.TextBox("SearchString", null, new { @class = "form-control", @placeholder = "Search" })
+            </div>
+            <div class="col-md-4">
+                <a href="#" class="btn btn-primary mt-4" id="@(Model.GridHTMLId)_SearchButton" data-tic_tableid="@Model.GridHTMLId" onclick="RefreshDatatableData('@Model.GridHTMLId');"><span class="fa fa-search"></span> Search</a>
+                <a href="#" class="btn btn-primary mt-4 me-3" id="@(Model.GridHTMLId)_SearchButton" data-tic_tableid="@Model.GridHTMLId" onclick="ResetSearchForm('@(Model.GridHTMLId)_GridSearchForm','@Model.GridHTMLId');"><span class="fa fa-refresh"></span> Reset</a>
+
+            </div>
+        </div>
+    </div>
+}
+
+<div class="table-records-responsive">
+    <table id="@Model.GridHTMLId" class="jq-dt-records-table table responsive nowrap table-hover table-sm ">
+
+        @Html.Partial("_GridHeader", oObject)
+        @if (Model.DrawGridBody)
+        {
+            @Html.Partial("_GridBody", Model)
+        }
+
+    </table>
+</div>
+

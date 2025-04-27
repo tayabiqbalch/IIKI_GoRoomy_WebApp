@@ -1,0 +1,66 @@
+﻿@model IIKI.GoRoomy.Business.Objects.HotelRoom
+@using IIKI.BaseApp.Localization.Resources;
+@using IIKI;
+
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string menuName = "HotelRooms";
+    string pageTitle = ViewBag.Title;
+    string currentControllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    string currentAreaName = Convert.ToString(this.ViewContext.RouteData.DataTokens["area"]);
+
+    /*Page Header*/
+
+    var pageHeaderViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetPageHeader(Model.Id
+, pageTitle/*Needs to update this for related page*/
+, $"{Model.HotelName}"/*Needs to update this for related page*/
+, (int)IIKI.GoRoomy.Common.Navigations.Hotels/*Needs to update this for related page*/
+, (int)IIKI.BaseApp.Common.PageTypes.AddEdit);
+    if (Model.Id > 0)
+    {
+        pageHeaderViewModel.tabs = new List<IIKI.BaseApp.Business.Objects.TabsViewModel>
+        {
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Room Details", TabLink = Url.Action("AddEdit","HotelRooms", new { MotelId = Model.HotelId.EncryptQueryString(), Id = Model.Id }), IsActive = true },
+            new IIKI.BaseApp.Business.Objects.TabsViewModel { TabTitle = "Room Slots", TabLink = Url.Action("Index","HotelRoomSlots", new { MotelId = Model.HotelId.EncryptQueryString(), MotelRoomId = Model.Id.EncryptQueryString() }), IsActive = false },
+
+        };
+    }
+    Html.RenderPartial("_PageHeader", pageHeaderViewModel);
+    /*End Page Header*/
+
+    /*Page Content*/
+
+    /*generate buttons model which is used to display buttons in bottom and/or top of form*/
+    var buttonsViewModel = new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit)
+    {
+        IsDisplaySaveButton = true,
+        IsDisplaySaveAddButton = true,
+        IsDisplayCancelButton = true,
+        SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Submit,
+        BackURL = Url.Action("Index", "HotelRooms", new { MotelId = Model.HotelId.EncryptQueryString() }),
+    };
+    /*generate page content model*/
+    var pageContentViewModel = IIKI.BaseApp.Business.Methods.CommonBAL.GetAddEditPageContentModel(Model.Id, menuName, Model, buttonsViewModel);
+    pageContentViewModel.AddEditFormSubmitURL = Url.Action("AddEdit", new { Id = Model.Id });
+
+    <!--Page Content Partial View-->
+    Html.RenderPartial("_PageContent", pageContentViewModel);
+    /*End Page Content*/
+}
+@section scripts {
+    @*@Scripts.Render("~/bundles/jqueryValidation")*@
+    <script>
+
+        $(document).ready(function () {
+
+            $(document).on("click", ".btnFormSubmit", function () {
+                if ($("#@pageContentViewModel.AddEditFormSubmitURL").valid()) {
+                    ShowStickyPopup();
+                }
+            });
+        });
+
+    </script>
+}

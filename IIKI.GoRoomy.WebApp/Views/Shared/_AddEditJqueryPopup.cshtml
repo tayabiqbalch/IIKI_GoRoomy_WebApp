@@ -1,0 +1,15 @@
+﻿@using IIKI.BaseApp.Localization.Resources;
+@using IIKI.BaseApp.Business.Objects;
+@model AddEditModalPopupViewModel
+
+
+<div id="AddEditJQueryPopup" class="edit__popup" style="width: 45%;">
+    <div id="AddEditPopupBody" style="margin-left: 5%;">
+        <div class="card icard">
+            <div class="card-footer">
+                @Html.Partial("_Buttons", new IIKI.BaseApp.Business.Objects.ButtonsViewModel((int)IIKI.BaseApp.Common.PageTypes.AddEdit) { Id = 0, IsModalPopup = false, IsGetModal = true, ModalPopupId = "AddEditJQueryPopup", ModalFormId = "AddEditForm", GetModalURL = Url.Action("_AddEditPopup", new { Id = 0 }), SaveButtonType = IIKI.BaseApp.Common.ButtonTypes.Button, IsDisplayModalSaveButton = true, IsDisplayModalCancelButton = true, IsDisplayModalSaveAddButton = true, IsReload = true })
+            </div>
+        </div>
+    </div>
+</div>
+
